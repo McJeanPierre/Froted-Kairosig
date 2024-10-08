@@ -1,5 +1,6 @@
 import React from 'react';
 import HomePage from './HomePage';
+import PricingSection from './PricingSection';
 
 function App() {
     return (

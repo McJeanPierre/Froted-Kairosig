@@ -13,7 +13,7 @@ html, body {
   color: #ffffff;
   height: 90vh;
   display: flex;
-  align-items: center;
+  align-items: center; /* Mantiene el contenido centrado verticalmente */
 }
 
 .container {
@@ -24,7 +24,6 @@ html, body {
   margin: 0 auto;
   padding: 0 15px;
   font-family: 'Roboto', sans-serif;
-
 }
 
 .content {
@@ -49,9 +48,10 @@ html, body {
 }
 
 .img-cubo {
-  width: 500px; /* Ajusta el tamaño de la imagen del cubo */
+  width: 600px; /* Ajusta el tamaño de la imagen del cubo a 300px */
   height: auto; /* Mantiene la proporción de la imagen */
   margin-left: 20px; /* Espacio entre el contenido y el cubo */
+  align-self: flex-start; /* Alinea el cubo en la parte superior */
 }
 
 h1 {
@@ -59,7 +59,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-.btndescubre{
+.btndescubre {
   display: inline-block;
   padding: 10px 20px;
   border: none;
@@ -67,8 +67,6 @@ h1 {
   cursor: pointer;
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-.btndescubre {
   background-color: #ffffff;
   color: #000000;
 }
@@ -77,41 +75,27 @@ h1 {
   background-color: #E88AE6;
 }
 
-.part2{
-  background-image: url('/causa-bg.png');
-  background-color: #000000;
-  background-size: cover;
-  background-position: center;
-  height: 150vh;
-  display: flex;
-  align-items: center;
-}
-
-.h2{
-  color: #000000;
-}
-
-.sponsor{
+.sponsor {
   background-color: #000000;
   padding: 30px;
 }
 
-.sponsor .publicidad{
+.sponsor .publicidad {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.sponsor .sponsor-img{
+.sponsor .sponsor-img {
   width: 130px;
   transition: transform 0.3s;
 }
 
-.sponsor .sponsor-img:hover{
+.sponsor .sponsor-img:hover {
   transform: scale(1.1);
 }
 
-.divisor{
+.divisor {
   background-color: black;
   height: 20px;
 }
@@ -125,7 +109,6 @@ h1 {
   padding: 60px 20px;
   text-align: center;
 }
-
 
 .container-formulario {
   display: flex;
@@ -185,3 +168,73 @@ h1 {
   transform: scale(1.05);
 }
 
+/* Ajustes para dispositivos móviles */
+@media (max-width: 768px) {
+  .container, .container-location, .sponsor .publicidad {
+    flex-direction: column; /* Cambia a columna en pantallas pequeñas */
+    align-items: center;
+  }
+
+  .content, .content-location, .formulario form {
+    width: 100%; /* Ajusta el contenido a 100% para pantallas pequeñas */
+    padding: 0 10px; /* Ajusta el padding para mejorar el espacio */
+  }
+
+  .img-cubo, .location-img, .sponsor .sponsor-img {
+    width: 80%; /* Ajusta imágenes a ocupar todo el ancho */
+    margin-left: 0; /* Eliminar margen lateral */
+    margin-bottom: 20px; /* Espacio entre elementos */
+  }
+
+  .sponsor .sponsor-img {
+    width: 50px; /* Set a smaller width for sponsor images on mobile */
+    margin-bottom: 10px; /* Add some space between images */
+  }
+
+  h1, .country h1, .location-title, .location-name, .content-formulario h1 {
+    font-size: 28px; /* Reduce el tamaño de las fuentes para móviles */
+  }
+
+  .btndescubre, .btn-tickets, .btn {
+    width: 60%;
+    padding: 10px; /* Reduce padding for smaller screens */
+    font-size: 14px; /* Reduce font size for smaller screens */
+  }
+
+  .input {
+    padding: 10px; /* Reduce padding for smaller screens */
+    font-size: 14px; /* Reduce font size for smaller screens */
+  }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container, .container-location {
+    flex-direction: column;
+  }
+
+  .img-cubo, .location-img {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .content, .content-location {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .btndescubre, .btn-tickets {
+    width: 80%; /* Adjust width for tablets */
+    padding: 12px; /* Adjust padding for tablets */
+    font-size: 16px; /* Adjust font size for tablets */
+  }
+
+  .content-formulario h1 {
+    font-size: 28px;
+  }
+
+  .input {
+    padding: 12px; /* Adjust padding for tablets */
+    font-size: 15px; /* Adjust font size for tablets */
+  }
+}

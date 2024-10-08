@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.event-page {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.event-image {
+  position: relative;
+  width: 66.66%;
+}
+
+.room-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hotel-logo {
+  max-width: 300px;
+}
+
+.event-details {
+  width: 33.33%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+.info-title {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+  color: #00ffbf;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hotel-name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.hotel-location {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+.event-date {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #ffffff;
+}
+
+.map-container {
+  width: 90%;
+  background-color: #1a1a1a;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.map-iframe {
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.map-link {
+  color: #00ffbf;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.map-link:hover {
+  text-decoration: underline;
+}
+
+.buy-tickets-button {
+  background-color: #00ffbf;
+  color: #000000;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 768px) {
+  .event-page {
+    flex-direction: column;
+  }
+
+  .event-image {
+    width: 100%;
+    height: 50vh; /* Ajusta la altura para móviles */
+  }
+
+  .event-details {
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box; /* Ensure padding is included in the width */
+  }
+
+  .hotel-name {
+    font-size: 2rem;
+  }
+
+  .event-date {
+    font-size: 1.5rem;
+  }
+
+  .map-container {
+    width: 100%; /* Ensure the map container fits within the screen */
+    padding: 0.5rem; /* Reduce padding for smaller screens */
+  }
+
+  .map-iframe {
+    height: 200px; /* Reduce height for smaller screens */
+  }
+
+  .map-link {
+    font-size: 0.75rem; /* Reduce font size for smaller screens */
+  }
+
+  .buy-tickets-button {
+    width: 100%;
+    padding: 0.75rem; /* Reduce padding for smaller screens */
+    font-size: 1rem;
+  }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .event-page {
+    flex-direction: column;
+  }
+
+  .event-image {
+    width: 100%;
+    height: 60vh; /* Ajusta la altura para tablets */
+  }
+
+  .event-details {
+    width: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box; /* Ensure padding is included in the width */
+  }
+
+  .hotel-name {
+    font-size: 2.25rem;
+  }
+
+  .event-date {
+    font-size: 1.75rem;
+  }
+
+  .map-container {
+    width: 100%; /* Ensure the map container fits within the screen */
+    padding: 0.75rem; /* Adjust padding for tablets */
+  }
+
+  .map-iframe {
+    height: 225px; /* Adjust height for tablets */
+  }
+
+  .map-link {
+    font-size: 0.8rem; /* Adjust font size for tablets */
+  }
+
+  .buy-tickets-button {
+    width: 100%;
+    padding: 0.75rem; /* Adjust padding for tablets */
+    font-size: 1.1rem;
+  }
+}

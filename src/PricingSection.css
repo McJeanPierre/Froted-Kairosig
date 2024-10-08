@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+.pricing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding: 1rem;
+  font-family: 'Montserrat', sans-serif;
+  background-image: url('/Blanco.jpeg');
+}
+
+.pricing-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: #004d40;
+  color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 2rem;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.normal-price {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.normal-price .bold {
+  font-weight: 700;
+}
+
+.launch-price-text {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.launch-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.price-underline {
+  width: 100px;
+  height: 4px;
+  background-color: #00c853;
+  margin: 0.5rem auto 0;
+}
+
+.feature-list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.checkmark {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+  fill: #00c853;
+}
+
+.countdown {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.countdown p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.countdown-item {
+  background-color: black;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  width: 70px;
+}
+
+.countdown-item span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  display: block;
+}
+
+.countdown-item p {
+  font-family: 'Helvetica', sans-serif;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.buy-button {
+  width: 100%;
+  background-color: #00c853;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.buy-button:hover {
+  background-color: #00a844;
+}
+
+.limited-spots {
+  text-align: center;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+.payment-methods {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.payment-icon {
+  height: 24px;
+  width: 38px;
+  object-fit: contain;
+}
+
+.chat-section {
+  margin-top: 2rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.chat-icon {
+  color: #25D366;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-right: 1.5rem;
+}
+
+.chat-section h3 {
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.chat-section p {
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.4;
+}

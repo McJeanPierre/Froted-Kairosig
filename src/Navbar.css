@@ -29,11 +29,11 @@
   transition: color 0.3s;
 }
 
-.navbar-links :hover{
+.navbar-links a:hover {
   color: #0000FE;
 }
 
-.buy-button {
+.buy-button-navbar {
   background-color: #000000;
   display: inline-block;
   padding: 10px 20px;
@@ -44,11 +44,30 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.buy-button:hover {
+.buy-button-navbar:hover {
   background-color: #003aa7; /* Cambia el color de fondo al pasar el ratón */
 }
 
-.buy-button a {
+.buy-button-navbar a {
   color: white; /* Asegúrate de que el texto sea blanco */
   text-decoration: none; /* Sin subrayado */
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column; /* Cambia a columna en pantallas pequeñas */
+    padding: 1rem; /* Ajusta el padding */
+  }
+
+  .navbar-links {
+    flex-direction: column; /* Cambia a columna los enlaces */
+    gap: 0.5rem; /* Reduce el espacio entre enlaces */
+  }
+
+  .buy-button-navbar {
+    width: 100%; /* Botón ocupa todo el ancho */
+    text-align: center; /* Centra el texto */
+    margin-top: 1rem; /* Añade margen superior */
+  }
 }

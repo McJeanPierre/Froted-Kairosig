@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Navbar from './Navbar';
 import './HomePage.css';
+import Locacion from './Locacion';
+import PricingSection from './PricingSection';
 
 const HomePage = () => {
     return (
@@ -36,18 +38,8 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
-
-            <section className="divisor">
-                
-            </section>
-
-            <section className="part2">
-                <div className="container-part2">
-                    
-                </div>
-            </section>
-
-
+           <Locacion />
+           <PricingSection />
             <section className="sponsor">
                 <div className="container-sponsor">
                     <div className="publicidad">

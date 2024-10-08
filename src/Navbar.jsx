@@ -12,7 +12,7 @@ const Navbar = () => {
             <li><a href="#Planes">PLANES</a></li>
             <li><a href="#Contacto">CONTACTO</a></li>
           </ul>
-          <button className="buy-button"><a href="#Comprar">COMPRAR ENTRADAS</a></button>
+          <button className="buy-button-navbar"><a href="#Comprar">COMPRAR ENTRADAS</a></button>
 
         </nav>
     );
