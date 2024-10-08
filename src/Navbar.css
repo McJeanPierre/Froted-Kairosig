@@ -1,0 +1,54 @@
+.logo-img {
+  height: 45px; /* Ajusta el tamaño según tus necesidades */
+  width: auto; /* Mantiene la proporción */
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Espacia el logo y los enlaces */
+  align-items: center;
+  padding: 1rem 2rem;
+  font-family: 'Roboto', sans-serif;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex: 1;
+}
+
+.navbar-links li {
+  margin: 0;
+}
+
+.navbar-links a {
+  color: #000000;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navbar-links :hover{
+  color: #0000FE;
+}
+
+.buy-button {
+  background-color: #000000;
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.buy-button:hover {
+  background-color: #003aa7; /* Cambia el color de fondo al pasar el ratón */
+}
+
+.buy-button a {
+  color: white; /* Asegúrate de que el texto sea blanco */
+  text-decoration: none; /* Sin subrayado */
+}
