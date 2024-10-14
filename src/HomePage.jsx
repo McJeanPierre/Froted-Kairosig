@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import Navbar from './Navbar';
 import './HomePage.css';
 import Locacion from './Locacion';
-import PricingSection from './PricingSection';
+import PricingSection from './PricingSection';  
+import Footer from './footer';
+import Agenda from './Agenda';
 
 const HomePage = () => {
     return (
@@ -38,20 +40,36 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
+
+
            <Locacion />
-           <PricingSection />
-            <section className="sponsor">
+
+           <Agenda />
+
+           
+           <section id="pricing-section">
+                <PricingSection />
+            </section>
+
+
+           <section className="sponsor">
+                <h2 className="sponsor-title">Empresas que confían en nosotros</h2>
                 <div className="container-sponsor">
                     <div className="publicidad">
                         <img src="/carpefresh.png" alt="Sponsor 1" className="sponsor-img" />
                         <img src="/mariscos-flipper.png" alt="Sponsor 2" className="sponsor-img" />
-                        <img src="/SPORTMANCAR.png" alt="Sponsor 1" className="sponsor-img" />
-                        <img src="/israel.png" alt="Sponsor 1" className="sponsor-img" />
+                        <img src="/SPORTMANCAR.png" alt="Sponsor 3" className="sponsor-img" />
+                        <img src="/israel.png" alt="Sponsor 4" className="sponsor-img" />
                     </div>
                 </div>
             </section>
 
+            <section id="contact">
+            <Footer />
+            </section>
+
         </div>
+    
     );
 }
 

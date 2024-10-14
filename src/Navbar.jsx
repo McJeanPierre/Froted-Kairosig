@@ -9,13 +9,19 @@ const Navbar = () => {
           </div>
           <ul className="navbar-links">
             <li><a href="#Inicio">INICIO</a></li>
-            <li><a href="#Planes">PLANES</a></li>
-            <li><a href="#Contacto">CONTACTO</a></li>
+            <li><a href="#planes" onClick={() => scrollToSection('pricing-section')}>PlANES</a></li>
+            <li><a href="#Contacto" onClick={() => scrollToSection('contact')}>CONTACTO</a></li>
           </ul>
           <button className="buy-button-navbar"><a href="#Comprar">COMPRAR ENTRADAS</a></button>
 
         </nav>
     );
 }
+const scrollToSection = (sectionId) => {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 export default Navbar;

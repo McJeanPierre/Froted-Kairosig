@@ -37,6 +37,7 @@ html, body {
   margin-bottom: 20px;
 }
 
+
 .country h1 {
   font-size: 40px;
   margin-right: 10px;
@@ -59,16 +60,24 @@ h1 {
   margin-bottom: 20px;
 }
 
+p {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
 .btndescubre {
   display: inline-block;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
+  padding: 15px 30px;
+  border: 2px solid #ffffff;
+  border-radius: 50px;
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  background-color: #ffffff;
-  color: #000000;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btndescubre:hover {
@@ -78,21 +87,31 @@ h1 {
 .sponsor {
   background-color: #000000;
   padding: 30px;
+  text-align: center;
+}
+
+.sponsor-title {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 20px;
 }
 
 .sponsor .publicidad {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .sponsor .sponsor-img {
   width: 130px;
-  transition: transform 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin: 10px;
 }
 
 .sponsor .sponsor-img:hover {
   transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.073);
 }
 
 .divisor {

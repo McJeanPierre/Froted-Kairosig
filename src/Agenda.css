@@ -1,0 +1,115 @@
+@font-face {
+    font-family: 'HelveticaNeueB';
+    src: url('/fonts/HelveticaNeueB.woff2') format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'HelveticaNeueC';
+    src: url('/fonts/HelveticaNeueC.woff2') format('woff2');
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #4a0e4e 0%, #170229 100%);
+  }
+  
+  .agenda {
+    font-family: 'HelveticaNeueC', Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    color: white;
+  }
+  
+  .agenda h1 {
+    font-family: 'HelveticaNeueB', Arial, sans-serif;
+    text-align: center;
+    font-size: 5rem;
+    color: #ff69b4;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+  
+  .agenda .subtitle {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1.2rem;
+    opacity: 0.8;
+  }
+  
+  .agenda-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .agenda-item {
+    display: flex;
+    height: 120px;
+  }
+  
+  .time, .activity {
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .time {
+    font-family: 'HelveticaNeueC', Arial, sans-serif;
+    font-weight: normal;
+    font-size: 1.5rem;
+    width: 250px;
+    flex-shrink: 0;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .activity {
+    font-family: 'HelveticaNeueB', Arial, sans-serif;
+    font-size: 1.8rem;
+    flex-grow: 1;
+  }
+  
+  .activity strong {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .activity .description {
+    font-family: 'HelveticaNeueC', Arial, sans-serif;
+    font-size: 1.2rem;
+    margin: 5px 0;
+    opacity: 0.9;
+  }
+  
+  .activity .subdescription {
+    font-family: 'HelveticaNeueC', Arial, sans-serif;
+    font-size: 1rem;
+    margin: 5px 0 0;
+    opacity: 0.8;
+  }
+  
+  @media (max-width: 768px) {
+    .agenda-item {
+      flex-direction: column;
+      height: auto;
+    }
+  
+    .time {
+      width: auto;
+      text-align: left;
+      padding: 10px 20px;
+    }
+  
+    .activity {
+      padding: 20px;
+    }
+  
+    .agenda h1 {
+      font-size: 3rem;
+    }
+  }
