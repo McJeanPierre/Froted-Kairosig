@@ -87,16 +87,20 @@ const PricingSection = () => {
         <p className="limited-spots">Cupos limitados</p>
 
         <div className="payment-methods">
-          <img src="/placeholder.svg?height=24&width=38" alt="PayPal" className="payment-icon" />
-          <img src="/placeholder.svg?height=24&width=38" alt="Mastercard" className="payment-icon" />
-          <img src="/placeholder.svg?height=24&width=38" alt="Visa" className="payment-icon" />
-          <img src="/placeholder.svg?height=24&width=38" alt="American Express" className="payment-icon" />
-          <img src="/placeholder.svg?height=24&width=38" alt="Discover" className="payment-icon" />
+          <img src="/paypal.png" alt="PayPal" className="payment-icon" />
+          <img src="/mastercard.png" alt="Mastercard" className="payment-icon" />
+          <img src="/visacard.png" alt="Visa" className="payment-icon" />
+          <img src="/americancard.png" alt="American Express" className="payment-icon" />
+          <img src="/discovercard.jpg" alt="Discover" className="payment-icon" />
         </div>
       </div>
 
-      <div className="chat-section">
-        <MessageCircle className="chat-icon" />
+
+
+    <div className="chat-section">
+        <a href="https://wa.me/+593958617565" target="_blank" rel="noopener noreferrer">
+          <img src="/whatsapp.png" alt="Whatsapp" className="chat-icon" />
+        </a>
         <div>
           <h3>¡Chatea con nosotros!</h3>
           <p>

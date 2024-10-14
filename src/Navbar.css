@@ -4,6 +4,7 @@
 }
 
 .navbar {
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between; /* Espacia el logo y los enlaces */
   align-items: center;
