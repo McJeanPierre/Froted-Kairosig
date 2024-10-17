@@ -1,14 +1,27 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import PricingSection from './PricingSection';
-
+import Asientos from './Asientos';
+import Locacion from './Locacion';
+import Agenda from './Agenda';
+import Navbar from './Navbar';
 
 function App() {
-    return (
-        <div className="App">
-            <HomePage />
-        </div>
-    );
+  return (
+    <Router>
+      <div className="App">
+        <Navbar /> {/* Navbar solo aquí */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/pricing" element={<PricingSection />} />
+          <Route path="/asientos" element={<Asientos />} />
+          <Route path="/locacion" element={<Locacion />} />
+          <Route path="/agenda" element={<Agenda />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
