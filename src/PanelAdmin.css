@@ -16,7 +16,7 @@
 }
 
 .seat-map {
-  width: 60%;
+  width: 65%;
   background-color: white;
   padding: 2rem;
   border-radius: 8px;
@@ -257,3 +257,31 @@
   border: 1px solid #ccc; /* Añade un borde alrededor de la imagen */
 }
 
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .panel-content {
+    flex-direction: column; /* Cambia a layout de columna en pantallas pequeñas */
+    align-items: center;
+  }
+  
+  .seat-map, .client-form {
+    width: 73%; /* Asegura que los elementos ocupen todo el ancho disponible */
+    margin-bottom: 1.5rem; /* Añade un espacio entre los elementos */
+  }
+
+  .seat-grid {
+    grid-template-columns: repeat(5, 1fr); /* Ajusta el grid a 5 columnas en pantallas pequeñas */
+  }
+}
+
+@media (max-width: 480px) {
+  .seat-grid {
+    grid-template-columns: repeat(4, 1fr); /* Ajusta a 4 columnas en pantallas aún más pequeñas */
+  }
+  
+  .seat {
+    width: 1.75rem; /* Reduce el tamaño del asiento en pantallas pequeñas */
+    height: 1.75rem;
+    font-size: 0.65rem; /* Ajusta el tamaño del texto */
+  }
+}

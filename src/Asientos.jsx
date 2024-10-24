@@ -123,7 +123,7 @@ export default function SeatMap() {
               className="confirm-button"
             >
               Confirmar Selección
-            </button>
+            </button> 
           </>
         ) : (
           <button

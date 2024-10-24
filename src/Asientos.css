@@ -19,31 +19,34 @@
 
 .seat-map {
   background-color: white;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  width: 90%; /* Aumenta el tamaño para cubrir más área */
+  max-width: 1200px; /* Limita el tamaño máximo para pantallas grandes */
 }
 
 .seat-grid-container {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Mantiene 2 columnas */
+  gap: 2rem; /* Espacio entre los dos grupos de asientos */
 }
 
 .seat-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(15, 1fr); /* 15 asientos por fila */
   gap: 0.5rem;
 }
 
 .seat {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem; /* Aumenta el tamaño del asiento */
+  height: 3rem; /* Aumenta el tamaño del asiento */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: 0.85rem; /* Ajusta el tamaño del texto */
   border-radius: 0.25rem;
   cursor: pointer;
   border: none;
@@ -72,8 +75,8 @@
 }
 
 .stage {
-  width: 75%;
-  height: 0.5rem;
+  width: 100%; /* Ajusta el tamaño de la etapa al 100% del contenedor */
+  height: 0.75rem;
   background-color: #d1d5db;
   border-radius: 0.25rem;
   margin: 1rem auto 0;
@@ -103,4 +106,35 @@
 
 .random-button {
   background-color: #3b82f6;
+}
+
+/* Ajustes para dispositivos más pequeños */
+@media (max-width: 768px) {
+  .seat-grid {
+    grid-template-columns: repeat(10, 1fr); /* Ajusta a 10 columnas en pantallas pequeñas */
+  }
+}
+
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 768px) {
+  .seat-grid {
+    grid-template-columns: repeat(5, 1fr); /* Cambia a 5 columnas en pantallas pequeñas */
+  }
+  .seat {
+    width: 2rem; /* Reduce el tamaño del asiento en dispositivos móviles */
+    height: 2rem;
+    font-size: 0.75rem; /* Ajusta el tamaño del texto */
+  }
+}
+
+@media (max-width: 480px) {
+  .seat-grid {
+    grid-template-columns: repeat(4, 1fr); /* Ajusta a 4 columnas en pantallas más pequeñas */
+  }
+  .seat {
+    width: 1.75rem; /* Reduce aún más el tamaño del asiento en pantallas muy pequeñas */
+    height: 1.75rem;
+    font-size: 0.65rem; /* Reduce el tamaño del texto */
+  }
 }
