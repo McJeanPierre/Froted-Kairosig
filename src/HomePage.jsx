@@ -64,6 +64,8 @@ const HomePage = () => {
                 </div>
             </section>
 
+            
+
             <section id="contact">
             <Footer />
             </section>

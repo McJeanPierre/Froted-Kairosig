@@ -9,20 +9,34 @@ export default function SeatMap() {
 
   // Cargar el estado de los asientos desde el localStorage
   useEffect(() => {
-    const savedSeats = localStorage.getItem('seats');
-    const savedConfirmedSeats = localStorage.getItem('confirmedSeats');
+    const loadSeatsFromStorage = () => {
+      const savedSeats = localStorage.getItem('seats');
+      const savedConfirmedSeats = localStorage.getItem('confirmedSeats');
 
-    if (savedSeats && savedConfirmedSeats) {
-      setSeats(JSON.parse(savedSeats));
-      setConfirmedSeats(JSON.parse(savedConfirmedSeats));
-    } else {
-      // Inicializa los asientos si no hay nada en localStorage
-      const initialSeats = Array.from({ length: 300 }, (_, index) => ({
-        id: index + 1,
-        isOccupied: false,
-      }));
-      setSeats(initialSeats);
-    }
+      if (savedSeats && savedConfirmedSeats) {
+        setSeats(JSON.parse(savedSeats));
+        setConfirmedSeats(JSON.parse(savedConfirmedSeats));
+      } else {
+        // Inicializa los asientos si no hay nada en localStorage
+        const initialSeats = Array.from({ length: 300 }, (_, index) => ({
+          id: index + 1,
+          isOccupied: false,
+        }));
+        setSeats(initialSeats);
+      }
+    };
+
+    loadSeatsFromStorage();
+
+    // Añadir un listener para detectar cambios en el localStorage
+    const handleStorageChange = () => {
+      loadSeatsFromStorage();
+    };
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   // Guardar el estado de los asientos y confirmaciones en el localStorage
@@ -104,7 +118,7 @@ export default function SeatMap() {
                 </button>
               ))}
             </div>
-          ))}
+          ))} 
         </div>
         <div className="stage"></div>
       </div>
