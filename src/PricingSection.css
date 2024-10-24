@@ -6,16 +6,23 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f3f4f6;
   padding: 1rem;
   font-family: 'Montserrat', sans-serif;
-  background-image: url('/Blanco.jpeg');
+  
+  /* Fondo con imagen */
+  background-image: url('/5.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  
+  background-attachment: fixed; /* Esto asegura que el fondo se desplace con el efecto de paralaje */
+  background-position: 10% center; /* Ajusta este valor según lo que necesites */
 }
+
 
 .pricing-card {
   width: 100%;
   max-width: 400px;
-  background-color: #004d40;
+  background-color: #000000;
   color: white;
   border-radius: 0.75rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -50,7 +57,7 @@
 .price-underline {
   width: 100px;
   height: 4px;
-  background-color: #00c853;
+  background-color: #FFC050;
   margin: 0.5rem auto 0;
 }
 
@@ -73,7 +80,7 @@
   width: 1.25rem;
   height: 1.25rem;
   margin-right: 0.75rem;
-  fill: #00c853;
+  fill: #FFC050;
 }
 
 .countdown {
@@ -114,7 +121,7 @@
 
 .buy-button {
   width: 100%;
-  background-color: #00c853;
+  background-color: #FFC050;
   color: white;
   font-weight: 700;
   font-size: 1rem;
@@ -125,9 +132,6 @@
   transition: background-color 0.3s;
 }
 
-.buy-button:hover {
-  background-color: #00a844;
-}
 
 .limited-spots {
   text-align: center;

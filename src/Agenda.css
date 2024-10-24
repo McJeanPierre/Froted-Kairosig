@@ -8,13 +8,15 @@
     src: url('/fonts/HelveticaNeueC.woff2') format('woff2');
   }
   
-  body {
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #4a0e4e 0%, #170229 100%);
+  .agenda-container{
+    background-color: black;
+    background-image: url('/sponsors-bg.png');
+    background-size: cover;
+    background-position: center;
   }
   
   .agenda {
+    
     font-family: 'HelveticaNeueC', Arial, sans-serif;
     max-width: 1200px;
     margin: 0 auto;

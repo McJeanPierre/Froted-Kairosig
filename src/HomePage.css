@@ -7,11 +7,11 @@ html, body {
 
 .part1 {
   background-image: url('/fondo_slide2.png');
-  background-color: black;
+  background-color: rgb(0, 0, 0);
   background-size: cover;
   background-position: center;
   color: #ffffff;
-  height: 90vh;
+  height: 100vh;
   display: flex;
   align-items: center; /* Mantiene el contenido centrado verticalmente */
 }
@@ -68,20 +68,19 @@ p {
 .btndescubre {
   display: inline-block;
   padding: 15px 30px;
-  border: 2px solid #ffffff;
   border-radius: 50px;
   cursor: pointer;
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
-  background-color: transparent;
-  color: #ffffff;
+  background-color: #FFC050;
+  color: #000000;
   font-size: 18px;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btndescubre:hover {
-  background-color: #E88AE6;
+  background-color: #FFC050;
 }
 
 .sponsor {
@@ -120,7 +119,6 @@ p {
 }
 
 .formulario {
-  background-image: url('/contacto-bg.png');
   background-color: #ffffff;
   background-size: cover; /* Ajusta la imagen para cubrir todo el contenedor */
   background-position: center; /* Centra la imagen en el contenedor */
@@ -172,7 +170,7 @@ p {
 }
 
 .btn {
-  background-color: #ffccff; /* Color del botón */
+  background-color: #FFC050; /* Color del botón */
   color: #000000;
   border: none;
   padding: 15px;

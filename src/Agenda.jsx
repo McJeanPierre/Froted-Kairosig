@@ -19,22 +19,25 @@ const agendaItems = [
 
 const Agenda = () => {
   return (
-    <div className="agenda">
-      <h1>AGENDA</h1>
-      <p className="subtitle">Las conferencias en inglés contarán con traducción simultánea.</p>
-      <div className="agenda-grid">
-        {agendaItems.map((item, index) => (
-          <div key={index} className="agenda-item">
-            <div className="time">{item.time}</div>
-            <div className="activity">
-              <strong>{item.activity}</strong>
-              {item.description && <p className="description">{item.description}</p>}
-              {item.subdescription && <p className="subdescription">{item.subdescription}</p>}
+      <section className="agenda-container">
+        <div className="agenda">
+        <h1>AGENDA</h1>
+        <p className="subtitle">Las conferencias en inglés contarán con traducción simultánea.</p>
+        <div className="agenda-grid">
+          {agendaItems.map((item, index) => (
+            <div key={index} className="agenda-item">
+              <div className="time">{item.time}</div>
+              <div className="activity">
+                <strong>{item.activity}</strong>
+                {item.description && <p className="description">{item.description}</p>}
+                {item.subdescription && <p className="subdescription">{item.subdescription}</p>}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
+    
   );
 };
 

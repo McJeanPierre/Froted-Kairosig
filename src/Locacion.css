@@ -51,7 +51,7 @@ body {
   font-size: 1.25rem;
   font-weight: 300;
   margin-bottom: 0.5rem;
-  color: #00ffbf;
+  color: #FFC050;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -92,7 +92,7 @@ body {
 }
 
 .map-link {
-  color: #00ffbf;
+  color: #FFC050;
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 400;
@@ -103,7 +103,7 @@ body {
 }
 
 .buy-tickets-button {
-  background-color: #00ffbf;
+  background-color: #FFC050;
   color: #000000;
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;

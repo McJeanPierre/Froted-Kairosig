@@ -10,7 +10,7 @@ import Agenda from './Agenda';
 const HomePage = () => {
     return (
         <div>
-            <Navbar />
+       
             <section className="part1">
                 <div className="container">
                     <div className="content">
@@ -63,6 +63,8 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
+
+            
 
             <section id="contact">
             <Footer />

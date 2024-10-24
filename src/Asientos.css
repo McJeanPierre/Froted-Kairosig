@@ -1,0 +1,106 @@
+.seat-map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.seat-map-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.seat-map-info {
+  margin-bottom: 1rem;
+}
+
+.seat-map {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.seat-grid-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.5rem;
+}
+
+.seat {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  border: none;
+}
+
+.seat:disabled {
+  cursor: not-allowed;
+}
+
+.seat-available {
+  background-color: #e5e7eb;
+}
+
+.seat-available:hover {
+  background-color: #d1d5db;
+}
+
+.seat-selected {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.seat-occupied {
+  background-color: #ef4444;
+  color: white;
+}
+
+.stage {
+  width: 75%;
+  height: 0.5rem;
+  background-color: #d1d5db;
+  border-radius: 0.25rem;
+  margin: 1rem auto 0;
+}
+
+.selection-controls {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.confirm-button, .random-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.confirm-button {
+  background-color: #10b981;
+}
+
+.confirm-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.random-button {
+  background-color: #3b82f6;
+}
