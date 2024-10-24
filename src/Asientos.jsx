@@ -4,34 +4,35 @@ import './Asientos.css';
 export default function SeatMap() {
   const [seats, setSeats] = useState([]);
   const [selectedSeat, setSelectedSeat] = useState(null);
-  const [confirmedSeats, setConfirmedSeats] = useState([]);
   const [isSelectionEnabled, setIsSelectionEnabled] = useState(true);
 
-  // Cargar el estado de los asientos desde el localStorage
   useEffect(() => {
     const loadSeatsFromStorage = () => {
       const savedSeats = localStorage.getItem('seats');
-      const savedConfirmedSeats = localStorage.getItem('confirmedSeats');
-
-      if (savedSeats && savedConfirmedSeats) {
+      if (savedSeats) {
         setSeats(JSON.parse(savedSeats));
-        setConfirmedSeats(JSON.parse(savedConfirmedSeats));
       } else {
-        // Inicializa los asientos si no hay nada en localStorage
         const initialSeats = Array.from({ length: 300 }, (_, index) => ({
           id: index + 1,
-          isOccupied: false,
+          ocupado: false, // Cambiado para coincidir con PanelAdmin
+          comprador: null, 
+          cedula: null, 
+          comprobante: null,
         }));
         setSeats(initialSeats);
+        localStorage.setItem('seats', JSON.stringify(initialSeats));
       }
     };
 
     loadSeatsFromStorage();
 
-    // Añadir un listener para detectar cambios en el localStorage
     const handleStorageChange = () => {
-      loadSeatsFromStorage();
+      const savedSeats = localStorage.getItem('seats');
+      if (savedSeats) {
+        setSeats(JSON.parse(savedSeats));
+      }
     };
+
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
@@ -39,15 +40,10 @@ export default function SeatMap() {
     };
   }, []);
 
-  // Guardar el estado de los asientos y confirmaciones en el localStorage
-  useEffect(() => {
-    if (seats.length > 0) {
-      localStorage.setItem('seats', JSON.stringify(seats));
-    }
-    if (confirmedSeats.length > 0) {
-      localStorage.setItem('confirmedSeats', JSON.stringify(confirmedSeats));
-    }
-  }, [seats, confirmedSeats]);
+  const syncSeats = (updatedSeats) => {
+    localStorage.setItem('seats', JSON.stringify(updatedSeats));
+    setSeats(updatedSeats); // Asegurarse de que el estado se actualice inmediatamente
+  };
 
   const handleSeatClick = (seatId) => {
     if (!isSelectionEnabled) {
@@ -64,26 +60,22 @@ export default function SeatMap() {
 
   const confirmSeatSelection = () => {
     if (selectedSeat) {
-      setConfirmedSeats([...confirmedSeats, selectedSeat]);
-      setSeats(seats.map(seat => 
-        seat.id === selectedSeat ? { ...seat, isOccupied: true } : seat
-      ));
+      const updatedSeats = seats.map(seat => 
+        seat.id === selectedSeat ? { ...seat, ocupado: true } : seat // Usar 'ocupado'
+      );
+      syncSeats(updatedSeats); // Actualizar en localStorage y en el estado
       setSelectedSeat(null);
-
-      if (confirmedSeats.length + 1 >= 20) {
-        setIsSelectionEnabled(false);
-      }
     }
   };
 
   const assignRandomSeat = () => {
-    const availableSeats = seats.filter(seat => !seat.isOccupied);
+    const availableSeats = seats.filter(seat => !seat.ocupado); // Usar 'ocupado'
     if (availableSeats.length > 0) {
       const randomSeat = availableSeats[Math.floor(Math.random() * availableSeats.length)];
-      setConfirmedSeats([...confirmedSeats, randomSeat.id]);
-      setSeats(seats.map(seat => 
-        seat.id === randomSeat.id ? { ...seat, isOccupied: true } : seat
-      ));
+      const updatedSeats = seats.map(seat => 
+        seat.id === randomSeat.id ? { ...seat, ocupado: true } : seat // Usar 'ocupado'
+      );
+      syncSeats(updatedSeats); // Sincronizar entre componentes
     } else {
       alert('Lo siento, no hay asientos disponibles.');
     }
@@ -92,11 +84,6 @@ export default function SeatMap() {
   return (
     <div className="seat-map-container">
       <h1 className="seat-map-title">Mapa de Asientos del Congreso</h1>
-      <p className="seat-map-info">
-        {isSelectionEnabled
-          ? `Selecciona tu asiento (${20 - confirmedSeats.length} selecciones restantes)`
-          : 'Asignación aleatoria de asientos activada'}
-      </p>
       <div className="seat-map">
         <div className="seat-grid-container">
           {[0, 1].map((side) => (
@@ -105,9 +92,9 @@ export default function SeatMap() {
                 <button
                   key={seat.id}
                   onClick={() => handleSeatClick(seat.id)}
-                  disabled={seat.isOccupied}
+                  disabled={seat.ocupado} // Usar 'ocupado'
                   className={`seat ${
-                    seat.isOccupied
+                    seat.ocupado // Usar 'ocupado'
                       ? 'seat-occupied'
                       : seat.id === selectedSeat
                       ? 'seat-selected'

@@ -6,7 +6,7 @@
 .navbar {
   background-color: #ffffff;
   display: flex;
-  justify-content: space-between; /* Espacia el logo y los enlaces */
+  justify-content: space-between; /* Espacia el logo y el contenido */
   align-items: center;
   padding: 1rem 2rem;
   font-family: 'Roboto', sans-serif;
@@ -16,8 +16,6 @@
   list-style: none;
   display: flex;
   gap: 1rem;
-  justify-content: center;
-  flex: 1;
 }
 
 .navbar-links li {
@@ -54,6 +52,27 @@
   text-decoration: none; /* Sin subrayado */
 }
 
+/* Estilos para el botón de "Cerrar Sesión" */
+.logout-button {
+  background-color: #f44a40; /* Rojo para indicar acción de salida */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-left: auto; /* Mueve el botón de cerrar sesión a la extrema derecha */
+}
+
+.logout-button:hover {
+  background-color: #d43d32; /* Un tono más oscuro al hacer hover */
+}
+
+.logout-button a {
+  color: white;
+  text-decoration: none;
+}
+
 /* Ajustes para dispositivos móviles */
 @media (max-width: 768px) {
   .navbar {
@@ -66,8 +85,9 @@
     gap: 0.5rem; /* Reduce el espacio entre enlaces */
   }
 
-  .buy-button-navbar {
-    width: 100%; /* Botón ocupa todo el ancho */
+  .buy-button-navbar,
+  .logout-button {
+    width: 100%; /* Botones ocupan todo el ancho */
     text-align: center; /* Centra el texto */
     margin-top: 1rem; /* Añade margen superior */
   }

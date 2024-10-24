@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './PanelAdmin.css';
+import { useAuth } from './AuthContext'; // Importar AuthContext
 
 export default function PanelAdmin() {
-  const [sesionIniciada, setSesionIniciada] = useState(false);
+  const { isAuthenticated, login } = useAuth(); // Usar AuthContext para manejar la autenticación
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [asientos, setAsientos] = useState([]);
@@ -11,6 +12,7 @@ export default function PanelAdmin() {
   const [cedulaComprador, setCedulaComprador] = useState('');
   const [imagenComprobante, setImagenComprobante] = useState(null);
 
+  // Cargar los asientos al montar el componente
   useEffect(() => {
     const loadSeatsFromStorage = () => {
       const asientosGuardados = localStorage.getItem('seats');
@@ -25,15 +27,19 @@ export default function PanelAdmin() {
           comprobante: null
         }));
         setAsientos(asientosIniciales);
+        localStorage.setItem('seats', JSON.stringify(asientosIniciales)); // Inicializar asientos en localStorage
       }
     };
 
     loadSeatsFromStorage();
 
-    // Añadir un listener para detectar cambios en el localStorage
     const handleStorageChange = () => {
-      loadSeatsFromStorage();
+      const asientosGuardados = localStorage.getItem('seats');
+      if (asientosGuardados) {
+        setAsientos(JSON.parse(asientosGuardados)); // Actualizar el estado si cambian los asientos
+      }
     };
+
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
@@ -41,10 +47,15 @@ export default function PanelAdmin() {
     };
   }, []);
 
+  const syncSeats = (updatedSeats) => {
+    localStorage.setItem('seats', JSON.stringify(updatedSeats));
+    setAsientos(updatedSeats); // Asegurarse de que el estado se actualice inmediatamente
+  };
+
   const manejarInicioSesion = (e) => {
     e.preventDefault();
     if (nombreUsuario === 'Admin' && contraseña === 'Admin') {
-      setSesionIniciada(true);
+      login();
     } else {
       alert('Credenciales inválidas');
     }
@@ -81,8 +92,7 @@ export default function PanelAdmin() {
             }
           : asiento
       );
-      setAsientos(asientosActualizados);
-      localStorage.setItem('seats', JSON.stringify(asientosActualizados));
+      syncSeats(asientosActualizados); // Actualizar en localStorage y en el estado
       setAsientoSeleccionado(null);
       setNombreComprador('');
       setCedulaComprador('');
@@ -90,7 +100,8 @@ export default function PanelAdmin() {
     }
   };
 
-  if (!sesionIniciada) {
+  // Si el usuario no está autenticado, mostrar la pantalla de login
+  if (!isAuthenticated) {
     return (
       <div className="login-container">
         <div className="login-card">
