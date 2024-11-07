@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './PanelAdmin.css';
-import { useAuth } from './AuthContext'; // Importar AuthContext
+import { useAuth } from './AuthContext';
+import axios from 'axios';
 
 export default function PanelAdmin() {
-  const { isAuthenticated, login } = useAuth(); // Usar AuthContext para manejar la autenticación
+  const { isAuthenticated, login } = useAuth();
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [asientos, setAsientos] = useState([]);
@@ -12,52 +13,35 @@ export default function PanelAdmin() {
   const [cedulaComprador, setCedulaComprador] = useState('');
   const [imagenComprobante, setImagenComprobante] = useState(null);
 
-  // Cargar los asientos al montar el componente
+  // Cargar los asientos desde el backend al montar el componente
   useEffect(() => {
-    const loadSeatsFromStorage = () => {
-      const asientosGuardados = localStorage.getItem('seats');
-      if (asientosGuardados) {
-        setAsientos(JSON.parse(asientosGuardados));
-      } else {
-        const asientosIniciales = Array.from({ length: 300 }, (_, index) => ({
-          id: index + 1,
-          ocupado: false,
-          comprador: null,
-          cedula: null,
-          comprobante: null
-        }));
-        setAsientos(asientosIniciales);
-        localStorage.setItem('seats', JSON.stringify(asientosIniciales)); // Inicializar asientos en localStorage
+    const fetchSeats = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/asientos');
+        setAsientos(response.data);
+      } catch (error) {
+        console.error('Error al cargar los asientos:', error);
       }
     };
 
-    loadSeatsFromStorage();
-
-    const handleStorageChange = () => {
-      const asientosGuardados = localStorage.getItem('seats');
-      if (asientosGuardados) {
-        setAsientos(JSON.parse(asientosGuardados)); // Actualizar el estado si cambian los asientos
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
+    fetchSeats();
   }, []);
 
-  const syncSeats = (updatedSeats) => {
-    localStorage.setItem('seats', JSON.stringify(updatedSeats));
-    setAsientos(updatedSeats); // Asegurarse de que el estado se actualice inmediatamente
-  };
-
-  const manejarInicioSesion = (e) => {
+  const manejarInicioSesion = async (e) => {
     e.preventDefault();
-    if (nombreUsuario === 'Admin' && contraseña === 'Admin') {
-      login();
-    } else {
-      alert('Credenciales inválidas');
+    try {
+      const response = await axios.post('http://localhost:5000/api/admin/login', {
+        email: nombreUsuario,
+        contraseña: contraseña
+      });
+      if (response.data.success) {
+        login();
+      } else {
+        alert('Credenciales inválidas');
+      }
+    } catch (error) {
+      console.error('Error en el inicio de sesión:', error);
+      alert('Error en el inicio de sesión');
     }
   };
 
@@ -73,30 +57,70 @@ export default function PanelAdmin() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagenComprobante(reader.result); // Guardar la imagen en base64
+        setImagenComprobante(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const guardarCambios = () => {
+  const guardarCambios = async () => {
     if (asientoSeleccionado) {
-      const asientosActualizados = asientos.map(asiento => 
-        asiento.id === asientoSeleccionado.id 
-          ? { 
-              ...asiento, 
-              ocupado: !!nombreComprador, 
-              comprador: nombreComprador || null,
-              cedula: cedulaComprador || null,
-              comprobante: imagenComprobante
-            }
-          : asiento
-      );
-      syncSeats(asientosActualizados); // Actualizar en localStorage y en el estado
-      setAsientoSeleccionado(null);
-      setNombreComprador('');
-      setCedulaComprador('');
-      setImagenComprobante(null);
+      try {
+        // Actualizar el estado del asiento en el backend
+        await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`, {
+          disponible: !nombreComprador, // Si hay un comprador, el asiento se marca como no disponible
+        });
+
+        // Actualizar el estado localmente después de la actualización exitosa
+        const asientosActualizados = asientos.map(asiento =>
+          asiento.asiento_id === asientoSeleccionado.asiento_id
+            ? {
+                ...asiento,
+                disponible: !nombreComprador,
+                comprador: nombreComprador || null,
+                cedula: cedulaComprador || null,
+                comprobante: imagenComprobante
+              }
+            : asiento
+        );
+
+        setAsientos(asientosActualizados);
+        setAsientoSeleccionado(null);
+        setNombreComprador('');
+        setCedulaComprador('');
+        setImagenComprobante(null);
+      } catch (error) {
+        console.error('Error al actualizar el asiento:', error);
+        alert('Hubo un problema al guardar los cambios.');
+      }
+    }
+  };
+
+  const marcarComoDisponible = async () => {
+    if (asientoSeleccionado) {
+      try {
+        // Marca el asiento como disponible en el backend
+        await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`, {
+          disponible: true
+        });
+
+        // Actualiza el estado localmente después de la actualización exitosa
+        const asientosActualizados = asientos.map(asiento =>
+          asiento.asiento_id === asientoSeleccionado.asiento_id
+            ? { ...asiento, disponible: true, comprador: null, cedula: null, comprobante: null }
+            : asiento
+        );
+
+        setAsientos(asientosActualizados);
+        setAsientoSeleccionado(null);
+        setNombreComprador('');
+        setCedulaComprador('');
+        setImagenComprobante(null);
+        alert('Asiento marcado como disponible nuevamente.');
+      } catch (error) {
+        console.error('Error al marcar el asiento como disponible:', error);
+        alert('Hubo un problema al actualizar la disponibilidad del asiento.');
+      }
     }
   };
 
@@ -109,7 +133,7 @@ export default function PanelAdmin() {
           <form onSubmit={manejarInicioSesion}>
             <input
               type="text"
-              placeholder="Nombre de Usuario"
+              placeholder="Correo Electrónico"
               value={nombreUsuario}
               onChange={(e) => setNombreUsuario(e.target.value)}
             />
@@ -136,17 +160,17 @@ export default function PanelAdmin() {
               <div key={side} className="seat-grid">
                 {asientos.slice(side * 150, (side + 1) * 150).map((asiento) => (
                   <button
-                    key={asiento.id}
+                    key={asiento.asiento_id}
                     onClick={() => manejarClicAsiento(asiento)}
                     className={`seat ${
-                      asiento.ocupado
+                      !asiento.disponible
                         ? 'seat-occupied'
-                        : asiento.id === asientoSeleccionado?.id
+                        : asiento.asiento_id === asientoSeleccionado?.asiento_id
                         ? 'seat-selected'
                         : 'seat-available'
                     }`}
                   >
-                    {asiento.id}
+                    {asiento.asiento_numero}
                   </button>
                 ))}
               </div>
@@ -157,7 +181,7 @@ export default function PanelAdmin() {
         <div className="client-form">
           {asientoSeleccionado ? (
             <>
-              <h2>Asiento {asientoSeleccionado.id}</h2>
+              <h2>Asiento {asientoSeleccionado.asiento_numero}</h2>
               <input
                 type="text"
                 placeholder="Nombre del Comprador"
@@ -186,6 +210,7 @@ export default function PanelAdmin() {
                 </div>
               )}
               <button onClick={guardarCambios} className="guardar-cambios">Guardar Cambios</button>
+              <button onClick={marcarComoDisponible} className="marcar-disponible">Marcar como Disponible</button>
             </>
           ) : (
             <p>Seleccione un asiento para ver los detalles</p>

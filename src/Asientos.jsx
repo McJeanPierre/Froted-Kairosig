@@ -1,49 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import './Asientos.css';
+import axios from 'axios';
 
 export default function SeatMap() {
   const [seats, setSeats] = useState([]);
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [isSelectionEnabled, setIsSelectionEnabled] = useState(true);
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
 
   useEffect(() => {
-    const loadSeatsFromStorage = () => {
-      const savedSeats = localStorage.getItem('seats');
-      if (savedSeats) {
-        setSeats(JSON.parse(savedSeats));
-      } else {
-        const initialSeats = Array.from({ length: 300 }, (_, index) => ({
-          id: index + 1,
-          ocupado: false, // Cambiado para coincidir con PanelAdmin
-          comprador: null, 
-          cedula: null, 
-          comprobante: null,
-        }));
-        setSeats(initialSeats);
-        localStorage.setItem('seats', JSON.stringify(initialSeats));
+    const fetchSeats = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/asientos'); // Obtiene asientos del backend
+        setSeats(response.data);
+      } catch (error) {
+        console.error('Error al cargar los asientos:', error);
       }
     };
 
-    loadSeatsFromStorage();
-
-    const handleStorageChange = () => {
-      const savedSeats = localStorage.getItem('seats');
-      if (savedSeats) {
-        setSeats(JSON.parse(savedSeats));
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
+    fetchSeats();
   }, []);
-
-  const syncSeats = (updatedSeats) => {
-    localStorage.setItem('seats', JSON.stringify(updatedSeats));
-    setSeats(updatedSeats); // Asegurarse de que el estado se actualice inmediatamente
-  };
 
   const handleSeatClick = (seatId) => {
     if (!isSelectionEnabled) {
@@ -55,29 +31,26 @@ export default function SeatMap() {
       setSelectedSeat(null);
     } else {
       setSelectedSeat(seatId);
+      setShowPaymentOptions(false); // Ocultar opciones de pago hasta confirmar selección
     }
   };
 
   const confirmSeatSelection = () => {
     if (selectedSeat) {
-      const updatedSeats = seats.map(seat => 
-        seat.id === selectedSeat ? { ...seat, ocupado: true } : seat // Usar 'ocupado'
-      );
-      syncSeats(updatedSeats); // Actualizar en localStorage y en el estado
-      setSelectedSeat(null);
+      setShowPaymentOptions(true);
     }
   };
 
-  const assignRandomSeat = () => {
-    const availableSeats = seats.filter(seat => !seat.ocupado); // Usar 'ocupado'
-    if (availableSeats.length > 0) {
-      const randomSeat = availableSeats[Math.floor(Math.random() * availableSeats.length)];
-      const updatedSeats = seats.map(seat => 
-        seat.id === randomSeat.id ? { ...seat, ocupado: true } : seat // Usar 'ocupado'
-      );
-      syncSeats(updatedSeats); // Sincronizar entre componentes
-    } else {
-      alert('Lo siento, no hay asientos disponibles.');
+  const handleDepositPayment = () => {
+    window.open("https://wa.me/593958617565?text=Hola%20me%20interesa%20comprar%20un%20asiento%20en%20Kariosig", "_blank");
+    setSelectedSeat(null); // Desselecciona el asiento después de redirigir a WhatsApp
+    setShowPaymentOptions(false); // Ocultar las opciones de pago
+  };
+
+  const handleHotmartPayment = () => {
+    if (selectedSeat) {
+      const hotmartUrl = `https://pay.hotmart.com/J96463323O?checkoutMode=2&custom_id=${selectedSeat}`;
+      window.open(hotmartUrl, '_blank');
     }
   };
 
@@ -90,18 +63,18 @@ export default function SeatMap() {
             <div key={side} className="seat-grid">
               {seats.slice(side * 150, (side + 1) * 150).map((seat) => (
                 <button
-                  key={seat.id}
-                  onClick={() => handleSeatClick(seat.id)}
-                  disabled={seat.ocupado} // Usar 'ocupado'
+                  key={seat.asiento_id}
+                  onClick={() => handleSeatClick(seat.asiento_id)}
+                  disabled={!seat.disponible}
                   className={`seat ${
-                    seat.ocupado // Usar 'ocupado'
+                    !seat.disponible
                       ? 'seat-occupied'
-                      : seat.id === selectedSeat
+                      : seat.asiento_id === selectedSeat
                       ? 'seat-selected'
                       : 'seat-available'
                   }`}
                 >
-                  {seat.id}
+                  {seat.asiento_numero}
                 </button>
               ))}
             </div>
@@ -134,6 +107,24 @@ export default function SeatMap() {
           </button>
         )}
       </div>
+      
+      {showPaymentOptions && (
+        <div className="payment-options">
+          <h3>Elige el método de pago:</h3>
+          <button 
+            onClick={handleDepositPayment} 
+            className="deposit-button"
+          >
+            Depósito Bancario
+          </button>
+          <button 
+            onClick={handleHotmartPayment} 
+            className="hotmart-button"
+          >
+            Pagar con Hotmart
+          </button>
+        </div>
+      )}
     </div>
   );
 }

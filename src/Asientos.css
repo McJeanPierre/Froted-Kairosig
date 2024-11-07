@@ -104,6 +104,43 @@
   cursor: not-allowed;
 }
 
+
+/* Botón de depósito bancario */
+.deposit-button {
+  padding: 0.75rem 1.5rem; /* Tamaño aumentado */
+  background-color: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.deposit-button:hover {
+  background-color: #d97706;
+}
+
+/* Botón Personalizado para Hotmart */
+.hotmart-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.hotmart-button:hover {
+  background-color: #16a34a;
+}
+
+
+
 .random-button {
   background-color: #3b82f6;
 }
@@ -138,3 +175,4 @@
     font-size: 0.65rem; /* Reduce el tamaño del texto */
   }
 }
+
