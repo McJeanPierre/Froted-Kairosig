@@ -29,11 +29,11 @@
 }
 
 .navbar-links a:hover {
-  color: #0000FE;
+  color: #FFC050;
 }
 
 .buy-button-navbar {
-  background-color: #ffea00;
+  background-color: #FFC050;
   display: inline-block;
   padding: 10px 20px;
   border: none;
@@ -44,7 +44,7 @@
 }
 
 .buy-button-navbar:hover {
-  background-color: #4883f2; /* Cambia el color de fondo al pasar el ratón */
+  background-color: #ffea00; /* Cambia el color de fondo al pasar el ratón */
 }
 
 .buy-button-navbar a {

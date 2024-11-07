@@ -8,27 +8,24 @@
     src: url('/fonts/HelveticaNeueC.woff2') format('woff2');
   }
   
-  .agenda-container{
-    background-color: black;
-    background-image: url('/sponsors-bg.png');
-    background-size: cover;
-    background-position: center;
-  }
+  .agenda-container {
+    background: linear-gradient(to bottom, orange, black);
+    font-family: 'HelveticaNeueB', sans-serif; /* Asegúrate de usar la fuente correcta */
+}
   
-  .agenda {
-    
-    font-family: 'HelveticaNeueC', Arial, sans-serif;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px;
-    color: white;
-  }
+.agenda {
+  font-family: 'HelveticaNeueC', Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+  color: white;
+}
   
   .agenda h1 {
     font-family: 'HelveticaNeueB', Arial, sans-serif;
     text-align: center;
     font-size: 5rem;
-    color: #ff69b4;
+    color: #000000;
     margin-bottom: 20px;
     letter-spacing: 2px;
   }
