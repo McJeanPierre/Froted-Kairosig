@@ -8,9 +8,11 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
+      <Link to="/">
       <div className="navbarlogo">
         <img src="/LOGO.png" alt="Logo" className="logo-img" />
       </div>
+      </Link>
       <ul className="navbar-links">
         {!isAuthenticated ? (
           <>
