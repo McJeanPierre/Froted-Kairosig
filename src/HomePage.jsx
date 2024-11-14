@@ -41,18 +41,7 @@ const HomePage = () => {
                 </div>
             </section>
 
-
-           <Locacion />
-
-           <Agenda />
-
-           
-           <section id="pricing-section">
-                <PricingSection />
-            </section>
-
-
-           <section className="sponsor">
+            <section className="sponsor">
                 <h2 className="sponsor-title">Empresas que confían en nosotros</h2>
                 <div className="container-sponsor">
                     <div className="publicidad">
@@ -64,7 +53,15 @@ const HomePage = () => {
                 </div>
             </section>
 
-            
+           <Locacion />
+
+           <Agenda />
+
+           
+           <section id="pricing-section">
+                <PricingSection />
+            </section>
+
 
             <section id="contact">
             <Footer />

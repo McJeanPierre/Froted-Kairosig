@@ -87,7 +87,7 @@
   text-align: center;
 }
 
-.confirm-button, .random-button {
+.random-button {
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   border: none;
@@ -96,11 +96,29 @@
 }
 
 .confirm-button {
-  background-color: #10b981;
+  background-color: #3085d6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.confirm-button:disabled {
-  background-color: #9ca3af;
+.confirm-button:hover {
+  background-color: #2874c5;
+  transform: scale(1.05);
+}
+
+.confirm-button:active {
+  background-color: #1e5a9b;
+  transform: scale(1);
+}
+
+.confirm-button.disabled {
+  background-color: #cccccc;
   cursor: not-allowed;
 }
 
@@ -139,6 +157,75 @@
   background-color: #16a34a;
 }
 
+
+.client-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.client-modal {
+  background: #ffffff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  width: 350px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.client-modal h3 {
+  margin-top: 0;
+  font-size: 1.2em;
+  color: #333333;
+}
+
+.client-modal input[type="text"],
+.client-modal input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.client-modal .confirm-client-button,
+.client-modal .close-modal-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.confirm-client-button {
+  background-color: #4CAF50;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-client-button:hover {
+  background-color: #45a049;
+}
+
+.close-modal-button {
+  background-color: #f44336;
+  color: white;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.close-modal-button:hover {
+  background-color: #e53935;
+}
 
 
 .random-button {

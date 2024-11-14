@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle } from 'lucide-react';
 import './PricingSection.css';
+import { Link } from 'react-router-dom';
 
 const PricingSection = () => {
   const [timeLeft, setTimeLeft] = useState({ days: 10, hours: 0, minutes: 0, seconds: 0 });
@@ -80,9 +81,11 @@ const PricingSection = () => {
           </div>
         </div>
 
-        <button className="buy-button">
+        <Link to="/asientos">      
+          <button className="buy-button">
           Comprar entradas a precio de lanzamiento
         </button>
+        </Link>
 
         <p className="limited-spots">Cupos limitados</p>
 

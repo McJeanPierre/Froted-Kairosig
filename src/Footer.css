@@ -41,9 +41,28 @@
 }
 
 .footer-icon:hover {
-  color: #666;
+  color: #FFC050;
   transform: scale(1.1);
 }
+
+.footer-logo a {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.footer-logo a:hover {
+  transform: scale(1.1); /* Aumenta ligeramente el tamaño al pasar el cursor */
+}
+
+.footer-logo a:active {
+  transform: scale(0.95); /* Reduce ligeramente el tamaño al hacer clic */
+}
+
+/* Si quieres darle un efecto de cambio de cursor */
+.footer-logo a {
+  cursor: pointer; /* Cambia el cursor al pasar el ratón */
+}
+
 
 .footer-logo {
   margin-bottom: 2rem;

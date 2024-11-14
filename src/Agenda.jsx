@@ -2,27 +2,30 @@ import React from 'react';
 import './Agenda.css';
 
 const agendaItems = [
-  { time: "08:00 AM - 09:00 AM", activity: "REGISTRO Y BIENVENIDA" },
-  { time: "09:00 AM - 9:30 AM", activity: "Host", description: "Apertura Congreso Reinvention" },
-  { time: "09:30 AM - 10:45 AM", activity: "Matt Klein", description: "What are the trending trends? - ¿Cuáles son las tendencias en tendencia?", subdescription: "Un META análisis de cientos de pronósticos" },
-  { time: "10:45 AM - 11:30 AM", activity: "COFFE BREAK" },
-  { time: "11:30 AM- 12:30 AM", activity: "Fabio Seidi", description: "Cómo el talento humano y las nuevas tecnologías revolucionarán la industria creativa" },
-  { time: "12:30 AM- 13:30 PM", activity: "Afdhel Aziz", description: "Reinventing Growth - Reinventando el crecimiento" },
-  { time: "13:30 PM - 15:00 PM", activity: "FREE LUNCH" },
-  { time: "15:00 AM- 16:00 PM", activity: "Lucas Chávez-Alcorta", description: "Innovar desde el nuevo talento:", subdescription: "El poder oculto de la sub B." },
-  { time: "16:00 AM- 17:00 AM", activity: "Ryan Patel", description: "Mindset global y estratégico", subdescription: "Construyendo éxito en un panorama empresarial de rápida evolución" },
-  { time: "17:00 PM - 17:45 PM", activity: "COFFE BREAK" },
-  { time: "17:45 AM- 18:45 PM", activity: "Taryn Southern", description: "Human & AI Collaboration - La colaboración entre los humanos y la Inteligencia Artificial" },
-  { time: "18:45 AM- 19:00 PM", activity: "HOST", description: "Cierre del evento" },
-  { time: "19:00 PM - 20:30 PM", activity: "VIP NETWORKING Cocktail" },
+  { time: "08:00 AM - 08:45 AM", activity: "REGISTRO", description: "Recepción de participantes y entrega de material del congreso."},
+  { time: "08:45 AM - 9:00 AM", activity: "BIENVENIDA", description: "Palabras de bienvenida por parte del Gerente  de KAIROSIG S.A.S." },
+  { time: "09:00 AM - 09:45 AM", activity: "CONFERENCIA MAGISTRAL", description: "La Revolución de la IA en la Industria Alimentaria Ponente", 
+    subdescription: "[Nombre del Ponente], [Título/Posición]." },
+  { time: "09:45 AM - 10:30 AM", activity: "Aplicaciones Actuales", 
+    description: "Futuras de la IA en la Producción Alimentaria Panelistas: [Nombres y Títulos].Moderador: [Nombre del Moderador].",},
+  { time: "10:30 AM- 11:15 AM", activity: " Coffee Break y Networking"},
+  { time: "11:15 AM- 12:00 PM", activity: "APLICACACIONES Actuales", description: "Futuras de la IA en la Producción Alimentaria Panelistas: [Nombres y Títulos].",
+    description:"Moderador: [Nombre del Moderador]."},
+  { time: "12:00 PM - 14:00 PM", activity: "ALMUERZO Y NETWORKING" },
+  { time: "14:00 AM- 14:45 PM", activity: "Innovación en la Automatización", description: "Procesos Alimentarios Panelistas: [Nombres y Títulos]." },
+  { time: "14:45 AM- 15:30 AM", activity: "IA para el Control", description: "Control de Calidad y Seguridad Alimentaria Panelistas: [Nombres y Títulos]."},
+  { time: "15:30 PM - 16:15 PM", activity: "OPTIMIZACIÓN", description: "De la Cadena de Suministro CON IA Panelistas: [Nombres y Títulos]."},
+  { time: "16:15 AM- 16:45 PM", activity: "Reconocimiento a los auspicinates del evento", },
+  { time: "16:45 AM- 17:00 PM", activity: "CLAUSURA", description: "Palabras de cierre por parte del CEO de KAIROSIG S.A.S." },
+  { time: "20:00 PM", activity: "CENA DE CLAUSURA" },
 ];
 
 const Agenda = () => {
   return (
       <section className="agenda-container">
         <div className="agenda">
-        <h1>AGENDA</h1>
-        <p className="subtitle">Las conferencias en inglés contarán con traducción simultánea.</p>
+        <h1>CRONOGRAMA</h1>
+        <p className="subtitle">Gronograma del evento presencial</p>
         <div className="agenda-grid">
           {agendaItems.map((item, index) => (
             <div key={index} className="agenda-item">

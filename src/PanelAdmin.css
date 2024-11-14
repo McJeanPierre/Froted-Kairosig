@@ -81,7 +81,9 @@
   margin-bottom: 1rem;
 }
 
-.client-form input[type="text"] {
+.client-form input[type="text"],
+.client-form input[type="email"] {
+  
   width: 100%;
   padding: 0.5rem;
   margin-bottom: 1rem;

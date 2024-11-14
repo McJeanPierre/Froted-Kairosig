@@ -115,6 +115,10 @@ body {
   text-transform: uppercase;
 }
 
+.buy-tickets-button:hover {
+  background-color: yellow;
+}
+
 /* Ajustes para dispositivos móviles */
 @media (max-width: 768px) {
   .event-page {
