@@ -7,11 +7,18 @@ export default function SeatMap() {
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [isSelectionEnabled, setIsSelectionEnabled] = useState(true);
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+  const [isClientModalVisible, setIsClientModalVisible] = useState(false);
+  const [clientData, setClientData] = useState({
+    nombre: '',
+    apellido: '',
+    cedula: '',
+    email: ''
+  });
 
   useEffect(() => {
     const fetchSeats = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/asientos'); // Obtiene asientos del backend
+        const response = await axios.get('http://localhost:5000/api/asientos');
         setSeats(response.data);
       } catch (error) {
         console.error('Error al cargar los asientos:', error);
@@ -37,8 +44,18 @@ export default function SeatMap() {
 
   const confirmSeatSelection = () => {
     if (selectedSeat) {
-      setShowPaymentOptions(true);
+      setIsClientModalVisible(true); // Mostrar modal de cliente
     }
+  };
+
+  const handleClientInputChange = (e) => {
+    const { name, value } = e.target;
+    setClientData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleConfirmClientData = () => {
+    setIsClientModalVisible(false); // Cerrar modal de cliente
+    setShowPaymentOptions(true); // Mostrar opciones de pago después de confirmar datos
   };
 
   const handleDepositPayment = () => {
@@ -50,9 +67,10 @@ export default function SeatMap() {
   const handleHotmartPayment = () => {
     if (selectedSeat) {
       const hotmartUrl = `https://pay.hotmart.com/J96463323O?checkoutMode=2&custom_id=${selectedSeat}`;
-      window.open(hotmartUrl, '_blank');
+      window.open(hotmartUrl, '_blank'); // Redirige a Hotmart sin hacer cambios en la base de datos
     }
   };
+  
 
   return (
     <div className="seat-map-container">
@@ -78,7 +96,7 @@ export default function SeatMap() {
                 </button>
               ))}
             </div>
-          ))} 
+          ))}
         </div>
         <div className="stage"></div>
       </div>
@@ -96,7 +114,7 @@ export default function SeatMap() {
               className="confirm-button"
             >
               Confirmar Selección
-            </button> 
+            </button>
           </>
         ) : (
           <button
@@ -107,7 +125,49 @@ export default function SeatMap() {
           </button>
         )}
       </div>
-      
+
+      {isClientModalVisible && (
+        <div className="client-modal-overlay">
+          <div className="client-modal">
+            <h3>Ingrese sus datos</h3>
+            <input
+              type="text"
+              name="nombre"
+              placeholder="Nombre"
+              value={clientData.nombre}
+              onChange={handleClientInputChange}
+            />
+            <input
+              type="text"
+              name="apellido"
+              placeholder="Apellido"
+              value={clientData.apellido}
+              onChange={handleClientInputChange}
+            />
+            <input
+              type="text"
+              name="cedula"
+              placeholder="Cédula"
+              value={clientData.cedula}
+              onChange={handleClientInputChange}
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Correo Electrónico"
+              value={clientData.email}
+              onChange={handleClientInputChange}
+            />
+            <button onClick={handleConfirmClientData} className="confirm-client-button">
+              Confirmar Datos
+            </button>
+            <button onClick={() => setIsClientModalVisible(false)} className="close-modal-button">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
+
       {showPaymentOptions && (
         <div className="payment-options">
           <h3>Elige el método de pago:</h3>

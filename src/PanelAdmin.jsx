@@ -10,10 +10,13 @@ export default function PanelAdmin() {
   const [asientos, setAsientos] = useState([]);
   const [asientoSeleccionado, setAsientoSeleccionado] = useState(null);
   const [nombreComprador, setNombreComprador] = useState('');
+  const [apellidoComprador, setApellidoComprador] = useState('');
   const [cedulaComprador, setCedulaComprador] = useState('');
+  const [emailComprador, setEmailComprador] = useState('');
+  const [metodoPago, setMetodoPago] = useState('');
+  const [qrCode, setQrCode] = useState(null);
   const [imagenComprobante, setImagenComprobante] = useState(null);
 
-  // Cargar los asientos desde el backend al montar el componente
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -47,82 +50,97 @@ export default function PanelAdmin() {
 
   const manejarClicAsiento = (asiento) => {
     setAsientoSeleccionado(asiento);
-    setNombreComprador(asiento.comprador || '');
-    setCedulaComprador(asiento.cedula || '');
-    setImagenComprobante(asiento.comprobante || null);
+    setNombreComprador(asiento.cliente_nombre || '');
+    setApellidoComprador(asiento.cliente_apellido || '');
+    setCedulaComprador(asiento.cliente_cedula || '');
+    setEmailComprador(asiento.cliente_email || '');
+    setMetodoPago(asiento.metodo_pago || ''); // Mostrar el método de pago
+    setQrCode(asiento.codigo_qr ? asiento.codigo_qr : null);
+    setImagenComprobante(asiento.imagen || null); // Cargar la imagen desde la base de datos
   };
+  
 
   const manejarCargaImagen = (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagenComprobante(reader.result);
       };
       reader.readAsDataURL(file);
+    } else {
+      alert('Por favor, suba un archivo de imagen válido.');
+      setImagenComprobante(null);
     }
   };
+
 
   const guardarCambios = async () => {
     if (asientoSeleccionado) {
       try {
-        // Actualizar el estado del asiento en el backend
-        await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`, {
-          disponible: !nombreComprador, // Si hay un comprador, el asiento se marca como no disponible
+        const response = await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`, {
+          disponible: false,
+          nombre: nombreComprador,
+          apellido: apellidoComprador,
+          cedula: cedulaComprador,
+          email: emailComprador,
+          imagen: imagenComprobante,  // Cambia 'comprobante' a 'imagen'
+          metodo_pago: "Deposito"
         });
-
-        // Actualizar el estado localmente después de la actualización exitosa
-        const asientosActualizados = asientos.map(asiento =>
-          asiento.asiento_id === asientoSeleccionado.asiento_id
-            ? {
-                ...asiento,
-                disponible: !nombreComprador,
-                comprador: nombreComprador || null,
-                cedula: cedulaComprador || null,
-                comprobante: imagenComprobante
-              }
-            : asiento
-        );
-
-        setAsientos(asientosActualizados);
-        setAsientoSeleccionado(null);
-        setNombreComprador('');
-        setCedulaComprador('');
-        setImagenComprobante(null);
+  
+        const updatedAsiento = response.data;
+  
+        // Recargar la lista de asientos desde el servidor para asegurar que todos los datos están actualizados
+        const responseAsientos = await axios.get('http://localhost:5000/api/asientos');
+        setAsientos(responseAsientos.data);
+  
+        // Actualizar el asiento seleccionado con los datos más recientes
+        setAsientoSeleccionado(updatedAsiento);
+  
+        setQrCode(updatedAsiento.codigo_qr);
+        alert('Datos actualizados, QR generado y comprobante de depósito guardado.');
       } catch (error) {
         console.error('Error al actualizar el asiento:', error);
         alert('Hubo un problema al guardar los cambios.');
       }
     }
   };
+  
 
-  const marcarComoDisponible = async () => {
-    if (asientoSeleccionado) {
-      try {
-        // Marca el asiento como disponible en el backend
-        await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`, {
-          disponible: true
-        });
+const marcarComoDisponible = async () => {
+  if (asientoSeleccionado) {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}/disponible`);
+      
+      const updatedAsiento = response.data;
 
-        // Actualiza el estado localmente después de la actualización exitosa
-        const asientosActualizados = asientos.map(asiento =>
-          asiento.asiento_id === asientoSeleccionado.asiento_id
-            ? { ...asiento, disponible: true, comprador: null, cedula: null, comprobante: null }
+      // Actualizar la lista de asientos para reflejar el cambio de disponibilidad en el estado general
+      setAsientos(prevAsientos =>
+        prevAsientos.map(asiento =>
+          asiento.asiento_id === updatedAsiento.asiento_id
+            ? { ...asiento, disponible: true, cliente_nombre: '', cliente_apellido: '', cliente_cedula: '', cliente_email: '', metodo_pago: '', imagen: null }
             : asiento
-        );
+        )
+      );
 
-        setAsientos(asientosActualizados);
-        setAsientoSeleccionado(null);
-        setNombreComprador('');
-        setCedulaComprador('');
-        setImagenComprobante(null);
-        alert('Asiento marcado como disponible nuevamente.');
-      } catch (error) {
-        console.error('Error al marcar el asiento como disponible:', error);
-        alert('Hubo un problema al actualizar la disponibilidad del asiento.');
-      }
+      // Limpia el formulario y el asiento seleccionado
+      setAsientoSeleccionado(null);
+      setNombreComprador('');
+      setApellidoComprador('');
+      setCedulaComprador('');
+      setEmailComprador('');
+      setMetodoPago('');
+      setQrCode(null);
+      setImagenComprobante(null);
+
+      alert('Asiento marcado como disponible nuevamente.');
+    } catch (error) {
+      console.error('Error al marcar el asiento como disponible:', error);
+      alert('Hubo un problema al actualizar la disponibilidad del asiento.');
     }
-  };
+  }
+};
+
 
   // Si el usuario no está autenticado, mostrar la pantalla de login
   if (!isAuthenticated) {
@@ -182,31 +200,25 @@ export default function PanelAdmin() {
           {asientoSeleccionado ? (
             <>
               <h2>Asiento {asientoSeleccionado.asiento_numero}</h2>
-              <input
-                type="text"
-                placeholder="Nombre del Comprador"
-                value={nombreComprador}
-                onChange={(e) => setNombreComprador(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Cédula del Comprador"
-                value={cedulaComprador}
-                onChange={(e) => setCedulaComprador(e.target.value)}
-              />
+              <input type="text" placeholder="Nombre del Comprador" value={nombreComprador} onChange={(e) => setNombreComprador(e.target.value)} />
+              <input type="text" placeholder="Apellido del Comprador" value={apellidoComprador} onChange={(e) => setApellidoComprador(e.target.value)} />
+              <input type="text" placeholder="Cédula del Comprador" value={cedulaComprador} onChange={(e) => setCedulaComprador(e.target.value)} />
+              <input type="email" placeholder="Correo Electrónico del Comprador" value={emailComprador} onChange={(e) => setEmailComprador(e.target.value)} />
+              <input type="text" placeholder="Método de Pago" value={metodoPago} disabled />
               <div className="file-input">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={manejarCargaImagen}
-                  id="comprobante"
-                />
+                <input type="file" accept="image/*" onChange={manejarCargaImagen} id="comprobante" />
                 <label htmlFor="comprobante">Seleccionar archivo</label>
                 <span>{imagenComprobante ? 'Archivo seleccionado' : 'Ningún archivo seleccionado'}</span>
               </div>
               {imagenComprobante && (
                 <div className="imagen-preview">
                   <img src={imagenComprobante} alt="Comprobante seleccionado" />
+                </div>
+              )}
+              {qrCode && (
+                <div className="qr-code">
+                  <h3>Código QR:</h3>
+                  <img src={qrCode} alt="Código QR del Asiento" />
                 </div>
               )}
               <button onClick={guardarCambios} className="guardar-cambios">Guardar Cambios</button>
