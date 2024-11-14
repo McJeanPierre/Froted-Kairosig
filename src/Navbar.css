@@ -8,10 +8,15 @@
   display: flex;
   justify-content: space-between; /* Espacia el logo y el contenido */
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 10px 20px;
   font-family: 'Roboto', sans-serif;
 }
 
+
+.navbar-item a {
+  font-size: 1.1rem; /* Aumenta el tamaño de la fuente */
+  font-weight: bold; /* Hace que la fuente sea más gruesa */
+}
 .navbar-links {
   list-style: none;
   display: flex;
@@ -29,11 +34,11 @@
 }
 
 .navbar-links a:hover {
-  color: #0000FE;
+  color: #FFC050;
 }
 
 .buy-button-navbar {
-  background-color: #ffea00;
+  background-color: #FFC050;
   display: inline-block;
   padding: 10px 20px;
   border: none;
@@ -41,10 +46,12 @@
   cursor: pointer;
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 1rem; /* Aumenta el tamaño de la fuente */
+  font-weight: bold; /* Hace que la fuente sea más gruesa */
 }
 
 .buy-button-navbar:hover {
-  background-color: #4883f2; /* Cambia el color de fondo al pasar el ratón */
+  background-color: rgb(255, 208, 0); /* Cambia el color de fondo al pasar el ratón */
 }
 
 .buy-button-navbar a {
@@ -76,19 +83,39 @@
 /* Ajustes para dispositivos móviles */
 @media (max-width: 768px) {
   .navbar {
-    flex-direction: column; /* Cambia a columna en pantallas pequeñas */
-    padding: 1rem; /* Ajusta el padding */
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-logo {
+    margin-bottom: 10px;
   }
 
   .navbar-links {
-    flex-direction: column; /* Cambia a columna los enlaces */
-    gap: 0.5rem; /* Reduce el espacio entre enlaces */
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Asegura que los enlaces ocupen todo el ancho disponible */
   }
 
-  .buy-button-navbar,
-  .logout-button {
-    width: 100%; /* Botones ocupan todo el ancho */
-    text-align: center; /* Centra el texto */
-    margin-top: 1rem; /* Añade margen superior */
+  .navbar-item {
+    margin: 5px 0;
+    width: 100%; /* Asegura que cada elemento ocupe todo el ancho disponible */
+    text-align: center; /* Centra el texto dentro de cada elemento */
+  }
+
+  .buy-button-navbar {
+    margin-top: 10px;
+    text-align: center;
   }
 }
+
+.navbar-item, .navbar-logo, .navbar-policy-text {
+  animation: footer-fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.navbar-item:nth-child(1) { animation-delay: 0.1s; }
+.navbar-item:nth-child(2) { animation-delay: 0.2s; }
+.navbar-item:nth-child(3) { animation-delay: 0.3s; }
+.navbar-logo { animation-delay: 0.4s; }
+.navbar-policy-text { animation-delay: 0.5s; }

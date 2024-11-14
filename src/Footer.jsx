@@ -17,7 +17,7 @@ export default function Footer() {
           <a href="https://www.facebook.com/kairosigformacionyproyectos" className="footer-icon facebook">
             <Facebook size={32} />
           </a>
-          <a href="https://www.instagram.com/kairosig_formacion_y_proyectos/" className="footer-icon instagram">
+          <a href="https://www.instagram.com/kairosig/" className="footer-icon instagram">
             <Instagram size={32} />
           </a>
           <a href="https://hotmart.com/es/marketplace/productos/afiliados-club-del-dinero/S58081490W" className="footer-icon hotmart">
@@ -25,7 +25,9 @@ export default function Footer() {
           </a>
         </div>
         <div className="footer-logo">
-          <img src="/LOGO.png" alt="Tu Logo" className="footer-custom-logo" />
+          <a href="https://kairosig.com/" target="_blank" rel="noopener noreferrer">
+            <img src="/LOGO.png" alt="Logo" className="footer-custom-logo" />
+          </a>
         </div>
         <p className="footer-policy-text">
           Al utilizar nuestro sitio web, usted acepta los términos de esta Política de Datos. Si

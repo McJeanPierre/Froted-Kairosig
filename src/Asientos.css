@@ -87,7 +87,7 @@
   text-align: center;
 }
 
-.confirm-button, .random-button {
+.random-button {
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   border: none;
@@ -96,11 +96,29 @@
 }
 
 .confirm-button {
-  background-color: #10b981;
+  background-color: #3085d6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.confirm-button:disabled {
-  background-color: #9ca3af;
+.confirm-button:hover {
+  background-color: #2874c5;
+  transform: scale(1.05);
+}
+
+.confirm-button:active {
+  background-color: #1e5a9b;
+  transform: scale(1);
+}
+
+.confirm-button.disabled {
+  background-color: #cccccc;
   cursor: not-allowed;
 }
 

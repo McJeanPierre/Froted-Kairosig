@@ -1,5 +1,6 @@
 import React from 'react';
 import './Locacion.css';
+import { Link } from 'react-router-dom';
 
 export default function EventPage() {
   return (
@@ -43,9 +44,11 @@ export default function EventPage() {
           </div>
         </div>
 
+        <Link to="/asientos">
         <button className="buy-tickets-button">
           Comprar entradas
         </button>
+        </Link>
       </div>
     </div>
   );

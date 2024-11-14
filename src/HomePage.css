@@ -37,7 +37,6 @@ html, body {
   margin-bottom: 20px;
 }
 
-
 .country h1 {
   font-size: 40px;
   margin-right: 10px;
@@ -80,37 +79,50 @@ p {
 }
 
 .btndescubre:hover {
-  background-color: #FFC050;
+  background-color: rgb(255, 208, 0);
 }
 
 .sponsor {
-  background-color: #000000;
-  padding: 30px;
+  background: linear-gradient(135deg, #000000, #333333);
+  padding: 50px 20px;
   text-align: center;
+  border: 5px solid #FFC050;
+  border-radius: 10px; /* Bordes redondeados para el contenedor */
+  margin: 1px 1px; /* Espacio vertical alrededor del contenedor */
 }
 
 .sponsor-title {
-  font-size: 2rem;
-  color: #ffffff;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
+  color: #FFC050;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .sponsor .publicidad {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
 .sponsor .sponsor-img {
-  width: 130px;
+  width: 150px;
+  height: 150px; /* Proporción uniforme para las imágenes */
+  object-fit: contain; /* Ajusta la imagen dentro del contenedor */
   transition: transform 0.3s, box-shadow 0.3s;
   margin: 10px;
+  border: 3px solid #FFC050;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+  background-color: #ffffff; /* Fondo blanco para las imágenes */
+  padding: 15px; /* Espacio interno alrededor de las imágenes */
 }
 
 .sponsor .sponsor-img:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.073);
+  transform: scale(1.15);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
 }
 
 .divisor {
@@ -166,7 +178,7 @@ p {
 }
 
 .input:focus {
-  border-color: #4b9cdb; /* Color del borde al enfocar */
+  border-color: #FFC050; /* Color del borde al enfocar */
 }
 
 .btn {
@@ -181,7 +193,7 @@ p {
 }
 
 .btn:hover {
-  background-color: #e88ae6;
+  background-color: rgb(255, 208, 0);
   transform: scale(1.05);
 }
 
@@ -255,3 +267,33 @@ p {
     font-size: 15px; /* Adjust font size for tablets */
   }
 }
+
+/* Animaciones */
+@keyframes homepage-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.part1 .content, .part1 .img-cubo, .sponsor-title, .sponsor .sponsor-img, .content-formulario h1, .content-formulario p, .formulario form .input, .formulario form .btn {
+  animation: homepage-fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.part1 .content { animation-delay: 0.1s; }
+.part1 .img-cubo { animation-delay: 0.2s; }
+.sponsor-title { animation-delay: 0.3s; }
+.sponsor .sponsor-img:nth-child(1) { animation-delay: 0.4s; }
+.sponsor .sponsor-img:nth-child(2) { animation-delay: 0.5s; }
+.sponsor .sponsor-img:nth-child(3) { animation-delay: 0.6s; }
+.content-formulario h1 { animation-delay: 0.7s; }
+.content-formulario p { animation-delay: 0.8s; }
+.formulario form .input:nth-child(1) { animation-delay: 0.9s; }
+.formulario form .input:nth-child(2) { animation-delay: 1s; }
+.formulario form .input:nth-child(3) { animation-delay: 1.1s; }
+.formulario form .btn { animation-delay: 1.2s; }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PanelAdmin.css';
 import { useAuth } from './AuthContext';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function PanelAdmin() {
   const { isAuthenticated, login } = useAuth();
@@ -32,19 +33,43 @@ export default function PanelAdmin() {
 
   const manejarInicioSesion = async (e) => {
     e.preventDefault();
+    
+    if (!nombreUsuario || !contraseña) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Por favor, ingrese tanto el correo electrónico como la contraseña.",
+      });
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:5000/api/admin/login', {
         email: nombreUsuario,
         contraseña: contraseña
       });
       if (response.data.success) {
-        login();
+        Swal.fire({
+          title: "¡Bienvenido, Administrador!",
+          text: "Inicio de sesión exitoso",
+          icon: "success"
+        }).then(() => {
+          login(); // Redirigir después de que el usuario cierre la alerta
+        });
       } else {
-        alert('Credenciales inválidas');
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Credenciales inválidas",
+        });
       }
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);
-      alert('Error en el inicio de sesión');
+      Swal.fire({
+        icon: "error",
+        title: "Error al iniciar Sesión",
+        text: "Verifica tu correo o contraseña",
+      });
     }
   };
 
