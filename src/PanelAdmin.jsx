@@ -17,6 +17,7 @@ export default function PanelAdmin() {
   const [metodoPago, setMetodoPago] = useState('');
   const [qrCode, setQrCode] = useState(null);
   const [imagenComprobante, setImagenComprobante] = useState(null);
+  const [codigoVerificacion, setCodigoVerificacion] = useState('');
 
   useEffect(() => {
     const fetchSeats = async () => {
@@ -82,6 +83,7 @@ export default function PanelAdmin() {
     setMetodoPago(asiento.metodo_pago || ''); // Mostrar el método de pago
     setQrCode(asiento.codigo_qr ? asiento.codigo_qr : null);
     setImagenComprobante(asiento.imagen || null); // Cargar la imagen desde la base de datos
+    setCodigoVerificacion(asiento.codigo_verificacion || ''); // Mostrar el código de verificación
   };
   
 
@@ -157,6 +159,7 @@ export default function PanelAdmin() {
           setImagenComprobante(null);
           setQrCode(null);
           setAsientoSeleccionado(null);
+          setCodigoVerificacion('');
           Swal.fire("Operación cancelada", "Todos los cambios han sido borrados.", "info");
         }
       });
@@ -176,7 +179,7 @@ export default function PanelAdmin() {
         setAsientos(prevAsientos =>
           prevAsientos.map(asiento =>
             asiento.asiento_id === updatedAsiento.asiento_id
-              ? { ...asiento, disponible: true, cliente_nombre: '', cliente_apellido: '', cliente_cedula: '', cliente_email: '', metodo_pago: '', imagen: null }
+              ? { ...asiento, disponible: true, cliente_nombre: '', cliente_apellido: '', cliente_cedula: '', cliente_email: '', metodo_pago: '', imagen: null, codigo_qr: null, codigo_verificacion: '' }
               : asiento
           )
         );
@@ -190,6 +193,7 @@ export default function PanelAdmin() {
         setMetodoPago('');
         setQrCode(null);
         setImagenComprobante(null);
+        setCodigoVerificacion('');
   
         Swal.fire({
           title: "¡Buen trabajo!",
@@ -282,6 +286,7 @@ export default function PanelAdmin() {
               <input type="text" placeholder="Cédula del Comprador" value={cedulaComprador} onChange={(e) => setCedulaComprador(e.target.value)} />
               <input type="email" placeholder="Correo Electrónico del Comprador" value={emailComprador} onChange={(e) => setEmailComprador(e.target.value)} />
               <input type="text" placeholder="Método de Pago" value={metodoPago} disabled />
+              <input type="text" placeholder="Código de Verificación" value={codigoVerificacion} disabled />
               <div className="file-input">
                 <input type="file" accept="image/*" onChange={manejarCargaImagen} id="comprobante" />
                 <label htmlFor="comprobante">Seleccionar archivo</label>
