@@ -103,11 +103,11 @@ export default function SeatMap() {
       <div className="selection-controls">
         {isSelectionEnabled ? (
           <>
-            <p>
-              {selectedSeat
-                ? `Has seleccionado el asiento ${selectedSeat}`
-                : 'Selecciona un asiento'}
-            </p>
+          <p className="select-seat-message">
+            {selectedSeat
+              ? `Has seleccionado el asiento ${selectedSeat}`
+              : 'Selecciona un asiento'}
+          </p>
             <button
               onClick={confirmSeatSelection}
               disabled={!selectedSeat}

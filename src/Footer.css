@@ -10,6 +10,12 @@
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
+
+.no-affect {
+  font-weight: bold; /* Ejemplo de estilo, puedes ajustarlo según tus necesidades */
+  color: inherit; /* Mantiene el color heredado */
+}
+
 .footer.visible {
   opacity: 1;
   transform: translateY(0);
