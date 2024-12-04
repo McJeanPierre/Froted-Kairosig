@@ -142,7 +142,10 @@ export default function PanelAdmin() {
             // Actualizar el asiento seleccionado con los datos más recientes
             setAsientoSeleccionado(updatedAsiento);
   
+            // Aquí se utilizará asiento_numero en lugar de asiento_id
             setQrCode(updatedAsiento.codigo_qr);
+            setCodigoVerificacion(updatedAsiento.codigo_verificacion); // Asegúrate de usar el nuevo código de verificación
+  
             Swal.fire("¡Guardado!", "Datos actualizados, QR generado y comprobante de depósito guardado.", "success");
           } catch (error) {
             console.error('Error al actualizar el asiento:', error);
@@ -166,8 +169,6 @@ export default function PanelAdmin() {
     }
   };
   
-  
-
   const marcarComoDisponible = async () => {
     if (asientoSeleccionado) {
       try {
