@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer className={`footer ${isVisible ? 'visible' : ''}`}>
       <div className="footer-container">
-        <p className="footer-follow-text">Síguenos:</p>
+        <p className="footer-follow-text no-affect">Síguenos:</p>        
         <div className="footer-social-icons">
           <a href="https://www.facebook.com/kairosigformacionyproyectos" className="footer-icon facebook">
             <Facebook size={32} />

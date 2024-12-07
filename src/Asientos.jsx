@@ -5,9 +5,9 @@ import axios from 'axios';
 export default function SeatMap() {
   const [seats, setSeats] = useState([]);
   const [selectedSeat, setSelectedSeat] = useState(null);
-  const [isSelectionEnabled, setIsSelectionEnabled] = useState(true);
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   const [isClientModalVisible, setIsClientModalVisible] = useState(false);
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [clientData, setClientData] = useState({
     nombre: '',
     apellido: '',
@@ -15,6 +15,7 @@ export default function SeatMap() {
     email: ''
   });
 
+  // Cargar los asientos desde el backend
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -29,11 +30,6 @@ export default function SeatMap() {
   }, []);
 
   const handleSeatClick = (seatId) => {
-    if (!isSelectionEnabled) {
-      assignRandomSeat();
-      return;
-    }
-
     if (selectedSeat === seatId) {
       setSelectedSeat(null);
     } else {
@@ -64,15 +60,33 @@ export default function SeatMap() {
     setShowPaymentOptions(false); // Ocultar las opciones de pago
   };
 
-  const handleHotmartPayment = () => {
+  const importHotmart = () => {
+    // Cargar el script y estilo de Hotmart de forma dinámica
+    const script = document.createElement('script');
+    script.src = 'https://static.hotmart.com/checkout/widget.min.js';
+    document.head.appendChild(script);
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = 'https://static.hotmart.com/css/hotmart-fb.min.css';
+    document.head.appendChild(link);
+  };
+
+  const handleHotmartPayment = async () => {
     if (selectedSeat) {
-      const hotmartUrl = `https://pay.hotmart.com/J96463323O?checkoutMode=2&custom_id=${selectedSeat}`;
-      window.open(hotmartUrl, '_blank'); // Redirige a Hotmart sin hacer cambios en la base de datos
+      importHotmart(); // Cargar los scripts solo cuando el usuario hace clic en el pago
+
+      // Generar la URL de pago con los parámetros dinámicos: ID de asiento y datos del cliente
+      const productoId = 'P96599423R'; // Reemplázalo con el ID de tu producto en Hotmart
+      const hotmartUrl = `https://pay.hotmart.com/${productoId}?checkoutMode=2&custom_id=${selectedSeat}&name=${clientData.nombre}&email=${clientData.email}`;
+
+      // Redirigir al usuario al enlace de pago de Hotmart en una nueva pestaña
+      window.open(hotmartUrl, '_blank');
     }
   };
-  
 
-  return (
+  return (  
     <div className="seat-map-container">
       <h1 className="seat-map-title">Mapa de Asientos del Congreso</h1>
       <div className="seat-map">
@@ -101,12 +115,12 @@ export default function SeatMap() {
         <div className="stage"></div>
       </div>
       <div className="selection-controls">
-        {isSelectionEnabled ? (
+        {selectedSeat ? (
           <>
-            <p>
+            <p className="select-seat-message">
               {selectedSeat
-                ? `Has seleccionado el asiento ${selectedSeat}`
-                : 'Selecciona un asiento'}
+              ? `Has seleccionado el asiento ${seats.find(seat => seat.asiento_id === selectedSeat)?.asiento_numero}`
+              : 'Selecciona un asiento'}
             </p>
             <button
               onClick={confirmSeatSelection}
@@ -117,12 +131,7 @@ export default function SeatMap() {
             </button>
           </>
         ) : (
-          <button
-            onClick={assignRandomSeat}
-            className="random-button"
-          >
-            Asignar Asiento Aleatorio
-          </button>
+          <p className="select-seat-message">Selecciona un asiento</p>
         )}
       </div>
 
@@ -171,17 +180,27 @@ export default function SeatMap() {
       {showPaymentOptions && (
         <div className="payment-options">
           <h3>Elige el método de pago:</h3>
-          <button 
-            onClick={handleDepositPayment} 
+          <button
+            onClick={handleDepositPayment}
             className="deposit-button"
           >
             Depósito Bancario
           </button>
-          <button 
-            onClick={handleHotmartPayment} 
+          <button
+            onClick={handleHotmartPayment}
             className="hotmart-button"
           >
             Pagar con Hotmart
+          </button>
+        </div>
+      )}
+
+      {paymentConfirmed && (
+        <div className="payment-confirmation-modal">
+          <h3>¡Pago Confirmado!</h3>
+          <p>Gracias por tu compra. El asiento ha sido reservado.</p>
+          <button onClick={() => setPaymentConfirmed(false)} className="close-confirmation-button">
+            Cerrar
           </button>
         </div>
       )}

@@ -5,9 +5,20 @@
   padding: 2rem;
 }
 
+/* Contenedor principal para los formularios */
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* Espacio entre los formularios */
+  justify-content: center; /* Centra los formularios horizontalmente */
+  padding: 1rem;
+}
+
+
 .panel-title {
   text-align: center;
   margin-bottom: 2rem;
+  color: #111111;
 }
 
 .panel-content {
@@ -16,22 +27,37 @@
 }
 
 .seat-map {
-  width: 65%;
+  width: 100%; /* Ajusta el ancho al 100% del contenedor padre */
+  max-width: 1000px; /* Limita el ancho máximo del contenedor */
   background-color: white;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: auto; /* Permite el desplazamiento horizontal y vertical si es necesario */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el contenido horizontalmente */
+  margin: 0 auto; /* Centra el contenedor en la página */
+}
+
+.stage {
+  width: 100%; /* Ajusta el tamaño de la etapa al 100% del contenedor */
+  height: 0.75rem;
+  background-color: #d1d5db;
+  border-radius: 0.25rem;
+  margin: 1rem 0; /* Ajusta el margen según sea necesario */
 }
 
 .seat-grid-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Distribuye las dos columnas de asientos */
   gap: 2rem;
+  width: 100%;
 }
 
 .seat-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr); /* 10 columnas por fila */
   gap: 0.5rem;
 }
 
@@ -41,7 +67,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 1rem; /* Ajusta el tamaño del texto */
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -61,34 +87,64 @@
   color: white;
 }
 
-.stage {
-  width: 75%;
-  height: 0.5rem;
-  background-color: #d1d5db;
-  border-radius: 0.25rem;
-  margin: 1rem auto 0;
-}
 
+/* Estilos para el formulario del cliente */
 .client-form {
-  width: 35%;
-  background-color: white;
-  padding: 2rem;
+  flex: 1;
+  max-width: 400px;
+  padding: 1rem;
+  background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.client-form p {
+  text-align: center;
+  font-size: 1rem;
+  color: #333; /* Color de texto */
+  margin-top: 2rem; /* Margen superior para separar del borde superior */
 }
 
 .client-form h2 {
   margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #333;
 }
 
+
+/* Estilos mejorados para los inputs */
 .client-form input[type="text"],
 .client-form input[type="email"] {
-  
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.client-form input[type="text"]:focus,
+.client-form input[type="email"]:focus,
+.login-card input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+.client-form .file-input {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.client-form .file-input input[type="file"] {
+  display: none;
 }
 
 .file-input {
@@ -101,14 +157,28 @@
   left: -9999px;
 }
 
-.file-input label {
-  display: inline-block;
+.client-form .file-input label {
+  background-color: #007bff;
+  color: white;
   padding: 0.5rem 1rem;
-  background-color: #e0e0e0;
-  color: black;
-  cursor: pointer;
   border-radius: 4px;
+  cursor: pointer;
+  margin-right: 1rem;
 }
+
+
+.client-form .file-input span {
+  flex-grow: 1;
+}
+
+.client-form .imagen-preview img,
+.client-form .qr-code img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
 
 .file-input span {
   margin-left: 1rem;
@@ -125,16 +195,14 @@
   margin-bottom: 0.5rem;
 }
 
-/* Botón "Marcar como Disponible" */
-.marcar-disponible {
-  width: 100%;
-  padding: 0.5rem;
-  background-color: #f59e0b; /* Amarillo para distinguirlo de otros botones */
+.client-form .guardar-cambios {
+  background-color: #10b981;
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 0.5rem;
+}
+
+.client-form .marcar-disponible-btn {
+  background-color: #ff9800;
+  color: white;
 }
 
 /* Contenedor principal del login */
@@ -192,9 +260,23 @@
   outline: none;
 }
 
-.login-card button {
+/* Estilos mejorados para los botones */
+.client-form button {
+  width: 100%;
   padding: 0.75rem;
-  background-color: #3b82f6;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+.login-card button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3b82f6; /* Verde */
   color: white;
   border: none;
   border-radius: 8px;
@@ -202,12 +284,33 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 0.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .login-card button:hover {
-  background-color: #2563eb;
+  background-color: #2563eb; /* Verde oscuro */
 }
 
+.client-form .guardar-cambios:hover {
+  background-color: #0f9b70;
+}
+
+.client-form .marcar-disponible-btn:hover {
+  background-color: #e68900;
+}
+
+
+.guardar-cambios,
+.marcar-disponible-btn {
+  font-family: 'Arial', sans-serif; /* Asegúrate de usar la misma fuente que el botón de "Iniciar Sesión" */
+  font-size: 1rem; /* Ajusta el tamaño de la fuente si es necesario */
+  font-weight: bold; /* Ajusta el peso de la fuente si es necesario */
+}
+
+.client-form button:active,
 .login-card button:active {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
