@@ -1,42 +1,37 @@
 import React, { useState, useEffect } from 'react';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { MessageCircle } from 'lucide-react';
 import './PricingSection.css';
 import { Link } from 'react-router-dom';
 
 const PricingSection = () => {
-  const [timeLeft, setTimeLeft] = useState({ days: 10, hours: 0, minutes: 0, seconds: 0 });
+  const targetDate = new Date('2025-04-26T00:00:00'); // Fecha específica
+
+  const calculateTimeLeft = () => {
+    const now = new Date();
+    const difference = targetDate - now;
+
+    let timeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    }
+
+    return timeLeft;
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        let newSeconds = prevTime.seconds - 1;
-        let newMinutes = prevTime.minutes;
-        let newHours = prevTime.hours;
-        let newDays = prevTime.days;
-
-        if (newSeconds < 0) {
-          newSeconds = 59;
-          newMinutes--;
-
-          if (newMinutes < 0) {
-            newMinutes = 59;
-            newHours--;
-
-            if (newHours < 0) {
-              newHours = 23;
-              newDays--;
-            }
-          }
-        }
-
-        if (newDays < 0 && newHours < 0 && newMinutes < 0 && newSeconds < 0) {
-          clearInterval(timer);
-          return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-        }
-
-        return { days: newDays, hours: newHours, minutes: newMinutes, seconds: newSeconds };
-      });
-    }, 1000); // Actualiza cada segundo
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -61,7 +56,7 @@ const PricingSection = () => {
             'Comunidad exclusiva de emprendedores'
           ].map((item, index) => (
             <li key={index}>
-              <svg className="checkmark" viewBox="0 0 20 20">
+              <svg className="checkmark" viewBox="0 0 18 18">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               {item}
@@ -98,9 +93,7 @@ const PricingSection = () => {
         </div>
       </div>
 
-
-
-    <div className="chat-section">
+      <div className="chat-section">
         <a href="https://wa.me/+593958617565" target="_blank" rel="noopener noreferrer">
           <img src="/whatsapp.png" alt="Whatsapp" className="chat-icon" />
         </a>
