@@ -20,7 +20,11 @@ export default function SeatMap() {
     const fetchSeats = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/asientos');
-        setSeats(response.data);
+        if (response.data && Array.isArray(response.data)) {
+          setSeats(response.data);
+        } else {
+          console.error('Estructura de datos inesperada:', response.data);
+        }
       } catch (error) {
         console.error('Error al cargar los asientos:', error);
       }
@@ -34,13 +38,13 @@ export default function SeatMap() {
       setSelectedSeat(null);
     } else {
       setSelectedSeat(seatId);
-      setShowPaymentOptions(false); // Ocultar opciones de pago hasta confirmar selección
+      setShowPaymentOptions(false);
     }
   };
 
   const confirmSeatSelection = () => {
     if (selectedSeat) {
-      setIsClientModalVisible(true); // Mostrar modal de cliente
+      setIsClientModalVisible(true);
     }
   };
 
@@ -50,43 +54,34 @@ export default function SeatMap() {
   };
 
   const handleConfirmClientData = () => {
-    setIsClientModalVisible(false); // Cerrar modal de cliente
-    setShowPaymentOptions(true); // Mostrar opciones de pago después de confirmar datos
+    setIsClientModalVisible(false);
+    setShowPaymentOptions(true);
   };
 
-  const handleDepositPayment = () => {
-    window.open("https://wa.me/593958617565?text=Hola%20me%20interesa%20comprar%20un%20asiento%20en%20Kariosig", "_blank");
-    setSelectedSeat(null); // Desselecciona el asiento después de redirigir a WhatsApp
-    setShowPaymentOptions(false); // Ocultar las opciones de pago
-  };
-
-  const importHotmart = () => {
-    // Cargar el script y estilo de Hotmart de forma dinámica
-    const script = document.createElement('script');
-    script.src = 'https://static.hotmart.com/checkout/widget.min.js';
-    document.head.appendChild(script);
-
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = 'https://static.hotmart.com/css/hotmart-fb.min.css';
-    document.head.appendChild(link);
+  const handleDepositPayment = async () => {
+    try {
+      await axios.put(`http://localhost:5000/api/asientos/${selectedSeat}/disponible`);
+      setSelectedSeat(null);
+      setShowPaymentOptions(false);
+      setPaymentConfirmed(true);
+    } catch (error) {
+      console.error('Error al procesar el pago:', error);
+    }
   };
 
   const handleHotmartPayment = async () => {
     if (selectedSeat) {
-      importHotmart(); // Cargar los scripts solo cuando el usuario hace clic en el pago
-
-      // Generar la URL de pago con los parámetros dinámicos: ID de asiento y datos del cliente
-      const productoId = 'P96599423R'; // Reemplázalo con el ID de tu producto en Hotmart
-      const hotmartUrl = `https://pay.hotmart.com/${productoId}?checkoutMode=2&custom_id=${selectedSeat}&name=${clientData.nombre}&email=${clientData.email}`;
-
-      // Redirigir al usuario al enlace de pago de Hotmart en una nueva pestaña
-      window.open(hotmartUrl, '_blank');
+      try {
+        const productoId = 'P96599423R'; // Reemplázalo con el ID de tu producto en Hotmart
+        const hotmartUrl = `https://pay.hotmart.com/${productoId}?checkoutMode=2&custom_id=${selectedSeat}&name=${clientData.nombre}&email=${clientData.email}`;
+        window.open(hotmartUrl, '_blank');
+      } catch (error) {
+        console.error('Error al redirigir a Hotmart:', error);
+      }
     }
   };
 
-  return (  
+  return (
     <div className="seat-map-container">
       <h1 className="seat-map-title">Mapa de Asientos del Congreso</h1>
       <div className="seat-map">
@@ -119,8 +114,8 @@ export default function SeatMap() {
           <>
             <p className="select-seat-message">
               {selectedSeat
-              ? `Has seleccionado el asiento ${seats.find(seat => seat.asiento_id === selectedSeat)?.asiento_numero}`
-              : 'Selecciona un asiento'}
+                ? `Has seleccionado el asiento ${seats.find(seat => seat.asiento_id === selectedSeat)?.asiento_numero}`
+                : 'Selecciona un asiento'}
             </p>
             <button
               onClick={confirmSeatSelection}

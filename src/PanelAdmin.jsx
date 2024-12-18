@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 export default function PanelAdmin() {
   const { isAuthenticated, login } = useAuth();
   const [nombreUsuario, setNombreUsuario] = useState('');
-  const [contraseña, setContraseña] = useState('');
+  const [contrasena, setContraseña] = useState('');
   const [asientos, setAsientos] = useState([]);
   const [asientoSeleccionado, setAsientoSeleccionado] = useState(null);
   const [nombreComprador, setNombreComprador] = useState('');
@@ -35,7 +35,7 @@ export default function PanelAdmin() {
   const manejarInicioSesion = async (e) => {
     e.preventDefault();
     
-    if (!nombreUsuario || !contraseña) {
+    if (!nombreUsuario || !contrasena) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -47,7 +47,7 @@ export default function PanelAdmin() {
     try {
       const response = await axios.post('http://localhost:5000/api/admin/login', {
         email: nombreUsuario,
-        contraseña: contraseña
+        contrasena: contrasena
       });
       if (response.data.success) {
         Swal.fire({
@@ -225,7 +225,7 @@ export default function PanelAdmin() {
             <input
               type="password"
               placeholder="Contraseña"
-              value={contraseña}
+              value={contrasena}
               onChange={(e) => setContraseña(e.target.value)}
             />
             <button className='incio'>Iniciar Sesión</button>
