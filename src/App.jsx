@@ -7,6 +7,7 @@ import Locacion from './Locacion';
 import Agenda from './Agenda';
 import Navbar from './Navbar';
 import PanelAdmin from './PanelAdmin';
+import NotFound from './NotFound';
 import { AuthProvider } from './AuthContext'; // Importar AuthProvider
 
 function App() {
@@ -14,14 +15,17 @@ function App() {
     <AuthProvider> {/* Envolver toda la app con AuthProvider */}
       <Router>
         <div className="App">
-          <Navbar /> {/* Navbar estará disponible y será actualizado según el estado de autenticación */}
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/pricing" element={<PricingSection />} />
-            <Route path="/asientos" element={<Asientos />} />
-            <Route path="/locacion" element={<Locacion />} />
-            <Route path="/agenda" element={<Agenda />} />
-            <Route path="/paneladmin" element={<PanelAdmin />} />
+            {/* Rutas normales con Navbar */}
+            <Route path="/" element={<><Navbar /><HomePage /></>} />
+            <Route path="/pricing" element={<><Navbar /><PricingSection /></>} />
+            <Route path="/asientos" element={<><Navbar /><Asientos /></>} />
+            <Route path="/locacion" element={<><Navbar /><Locacion /></>} />
+            <Route path="/agenda" element={<><Navbar /><Agenda /></>} />
+            <Route path="/paneladmin" element={<><Navbar /><PanelAdmin /></>} />
+            
+            {/* Ruta para la página de error */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </Router>
