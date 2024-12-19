@@ -53,7 +53,9 @@ const Navbar = () => {
         ) : (
           <>
             <li className="navbar-item">
-              <Link to="/paneladmin">PANEL ADMIN</Link>
+              <Link to="/paneladmin">
+                <button className="admin-button">PANEL ADMIN</button>
+              </Link>
             </li>
             <li className="navbar-item">
               <button className="logout-button" onClick={handleLogout}>CERRAR SESIÓN</button>

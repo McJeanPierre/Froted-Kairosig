@@ -12,7 +12,6 @@
   font-family: 'Roboto', sans-serif;
 }
 
-
 .navbar-item a {
   font-size: 1.1rem; /* Aumenta el tamaño de la fuente */
   font-weight: bold; /* Hace que la fuente sea más gruesa */
@@ -74,14 +73,31 @@
   margin-left: auto; /* Mueve el botón de cerrar sesión a la extrema derecha */
 }
 
+.admin-button {
+  background-color: #FFC050; /* Cambia el color de fondo */
+  color: white;
+  font-family: 'Arial', sans-serif; /* Asegúrate de usar la misma fuente que el botón de "Iniciar Sesión" */
+  font-size: 0.82rem; /* Ajusta el tamaño de la fuente si es necesario */
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+} 
+
+.admin-button:hover {
+  background-color: rgb(255, 208, 0); /* Cambia el color de fondo al pasar el ratón */
+}
 .logout-button:hover {
   background-color: #d43d32; /* Un tono más oscuro al hacer hover */
 }
 
-.logout-button a {
+.logout-button a, .admin-button a {
   color: white;
   text-decoration: none;
 }
+
 /* Ajustes para dispositivos móviles */
 @media (max-width: 768px) {
   .navbar {
@@ -118,7 +134,7 @@
     width: 100%; /* Asegura que el botón ocupe todo el ancho disponible */
   }
 
-  .logout-button {
+  .logout-button, .admin-button {
     width: 100%; /* Asegura que el botón de cerrar sesión ocupe todo el ancho disponible */
     text-align: center; /* Centra el texto dentro del botón */
   }
