@@ -102,12 +102,28 @@ export default function PanelAdmin() {
   };
 
 
+  const manejarCambioCedula = (e) => {
+    const valor = e.target.value;
+    if (/^\d{0,10}$/.test(valor)) {
+      setCedulaComprador(valor);
+    }
+  };
+
   const guardarCambios = async () => {
     if (!nombreComprador || !apellidoComprador || !cedulaComprador || !emailComprador || !imagenComprobante) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Por favor, complete todos los campos obligatorios y seleccione un archivo.',
+      });
+      return;
+    }
+  
+    if (!/^\d{10}$/.test(cedulaComprador)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en la cédula',
+        text: 'La cédula debe contener solo números y un máximo de 10 caracteres.',
       });
       return;
     }
