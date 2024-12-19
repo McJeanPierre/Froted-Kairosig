@@ -119,6 +119,16 @@ export default function PanelAdmin() {
       return;
     }
   
+    const token = localStorage.getItem('token');
+    if (!token) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de autenticación',
+        text: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
+      });
+      return;
+    }
+  
     if (asientoSeleccionado) {
       Swal.fire({
         title: "¿Desea guardar los cambios?",
@@ -130,33 +140,45 @@ export default function PanelAdmin() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const response = await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`, {
-              disponible: false,
-              nombre: nombreComprador,
-              apellido: apellidoComprador,
-              cedula: cedulaComprador,
-              email: emailComprador,
-              imagen: imagenComprobante,  // Cambia 'comprobante' a 'imagen'
-              metodo_pago: "Deposito"
-            });
-
+            const response = await axios.put(
+              `http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`,
+              {
+                disponible: false,
+                nombre: nombreComprador,
+                apellido: apellidoComprador,
+                cedula: cedulaComprador,
+                email: emailComprador,
+                imagen: imagenComprobante,  // Cambia 'comprobante' a 'imagen'
+                metodo_pago: "Deposito"
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Agregar token al encabezado
+                },
+              }
+            );
+  
             const updatedAsiento = response.data;
-
+  
             // Recargar la lista de asientos desde el servidor para asegurar que todos los datos están actualizados
             const responseAsientos = await axios.get('http://localhost:5000/api/asientos');
             setAsientos(responseAsientos.data);
-
+  
             // Actualizar el asiento seleccionado con los datos más recientes
             setAsientoSeleccionado(updatedAsiento);
-
+  
             // Aquí se utilizará asiento_numero en lugar de asiento_id
             setQrCode(updatedAsiento.codigo_qr);
             setCodigoVerificacion(updatedAsiento.codigo_verificacion); // Asegúrate de usar el nuevo código de verificación
-
+  
             Swal.fire("¡Guardado!", "Datos actualizados, QR generado y comprobante de depósito guardado.", "success");
           } catch (error) {
             console.error('Error al actualizar el asiento:', error);
-            Swal.fire('Hubo un problema al guardar los cambios.', '', 'error');
+            if (error.response?.status === 401 || error.response?.status === 403) {
+              Swal.fire('Error de autenticación', 'Por favor, inicia sesión nuevamente.', 'error');
+            } else {
+              Swal.fire('Hubo un problema al guardar los cambios.', '', 'error');
+            }
           }
         } else if (result.isDenied) {
           Swal.fire("Los cambios no se han guardado", "", "info");
@@ -175,6 +197,7 @@ export default function PanelAdmin() {
       });
     }
   };
+  
 
   const marcarComoDisponible = async () => {
     if (asientoSeleccionado) {
