@@ -1,30 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Importa Link
 import "./Navbar.css";
 import { useAuth } from './AuthContext'; // Importa el AuthContext
 import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const { isAuthenticated, logout } = useAuth(); // Usa el AuthContext
+  const { logout } = useAuth(); // Usa el AuthContext
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado local para autenticación
+
+  useEffect(() => {
+    // Verifica si el token existe en el localStorage al cargar el componente
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token); // Actualiza el estado según si el token existe
+  }, []);
+
+  const handleLoginSuccess = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+      window.location.reload(); // Recarga la página para reflejar cambios en el Navbar
+    }
+  };
 
   const handleLogout = () => {
     Swal.fire({
       title: "¿Estás seguro de que deseas cerrar sesión?",
-      text: "Tu sesión actual se cerrará y tendrás que iniciar sesión nuevamente para acceder.",
+      text: "Tu sesión actual se cerrará.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, cerrar sesión",
+      confirmButtonText: "Cerrar sesión",
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "¡Cerrado!",
-          text: "Has cerrado sesión exitosamente.",
-          icon: "success"
-        }).then(() => {
-          logout(); // Llama a la función logout del contexto de autenticación
+        localStorage.removeItem('token'); // Eliminar el token de localStorage
+        setIsAuthenticated(false); // Cambiar el estado de autenticación
+        logout();
+        Swal.fire("Sesión cerrada", "Has cerrado sesión exitosamente.", "success").then(() => {
+          window.location.reload(); // Recarga la página para garantizar que todos los estados se reinicien
         });
       }
     });
@@ -58,10 +70,15 @@ const Navbar = () => {
             </li>
           </>
         ) : (
-          // Si está autenticado, solo mostrar "Cerrar Sesión"
-          <li className="navbar-item">
-            <button className="logout-button" onClick={handleLogout}>CERRAR SESIÓN</button>
-          </li>
+          // Si está autenticado, mostrar "Panel de Admin" y "Cerrar Sesión"
+          <>
+            <li className="navbar-item">
+              <Link to="/paneladmin">PANEL ADMIN</Link>
+            </li>
+            <li className="navbar-item">
+              <button className="logout-button" onClick={handleLogout}>CERRAR SESIÓN</button>
+            </li>
+          </>
         )}
       </ul>
       {/* Mostrar el botón de "Comprar Entradas" solo si no está autenticado */}

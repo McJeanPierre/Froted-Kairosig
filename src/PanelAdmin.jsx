@@ -19,6 +19,9 @@ export default function PanelAdmin() {
   const [imagenComprobante, setImagenComprobante] = useState(null);
   const [codigoVerificacion, setCodigoVerificacion] = useState('');
 
+  // Obtener el token desde localStorage al cargar la página
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -34,7 +37,7 @@ export default function PanelAdmin() {
 
   const manejarInicioSesion = async (e) => {
     e.preventDefault();
-    
+
     if (!nombreUsuario || !contrasena) {
       Swal.fire({
         icon: "error",
@@ -50,12 +53,17 @@ export default function PanelAdmin() {
         contrasena: contrasena
       });
       if (response.data.success) {
+        // Guardar el token en localStorage
+        localStorage.setItem('token', response.data.token);
+        setToken(response.data.token);
+
         Swal.fire({
           title: "¡Bienvenido, Administrador!",
           text: "Inicio de sesión exitoso",
           icon: "success"
         }).then(() => {
           login(); // Redirigir después de que el usuario cierre la alerta
+          window.location.reload(); // Recargar la página para reflejar el cambio en el Navbar
         });
       } else {
         Swal.fire({
@@ -85,7 +93,6 @@ export default function PanelAdmin() {
     setImagenComprobante(asiento.imagen || null); // Cargar la imagen desde la base de datos
     setCodigoVerificacion(asiento.codigo_verificacion || ''); // Mostrar el código de verificación
   };
-  
 
   const manejarCargaImagen = (e) => {
     const file = e.target.files[0];
@@ -101,7 +108,6 @@ export default function PanelAdmin() {
     }
   };
 
-
   const guardarCambios = async () => {
     if (!nombreComprador || !apellidoComprador || !cedulaComprador || !emailComprador || !imagenComprobante) {
       Swal.fire({
@@ -111,7 +117,7 @@ export default function PanelAdmin() {
       });
       return;
     }
-  
+
     if (asientoSeleccionado) {
       Swal.fire({
         title: "¿Desea guardar los cambios?",
@@ -132,20 +138,20 @@ export default function PanelAdmin() {
               imagen: imagenComprobante,  // Cambia 'comprobante' a 'imagen'
               metodo_pago: "Deposito"
             });
-  
+
             const updatedAsiento = response.data;
-  
+
             // Recargar la lista de asientos desde el servidor para asegurar que todos los datos están actualizados
             const responseAsientos = await axios.get('http://localhost:5000/api/asientos');
             setAsientos(responseAsientos.data);
-  
+
             // Actualizar el asiento seleccionado con los datos más recientes
             setAsientoSeleccionado(updatedAsiento);
-  
+
             // Aquí se utilizará asiento_numero en lugar de asiento_id
             setQrCode(updatedAsiento.codigo_qr);
             setCodigoVerificacion(updatedAsiento.codigo_verificacion); // Asegúrate de usar el nuevo código de verificación
-  
+
             Swal.fire("¡Guardado!", "Datos actualizados, QR generado y comprobante de depósito guardado.", "success");
           } catch (error) {
             console.error('Error al actualizar el asiento:', error);
@@ -168,14 +174,31 @@ export default function PanelAdmin() {
       });
     }
   };
-  
+
   const marcarComoDisponible = async () => {
     if (asientoSeleccionado) {
       try {
-        const response = await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}/disponible`);
-        
+        if (!token) {
+          Swal.fire({
+            title: "Error de autenticación",
+            text: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+            icon: "error"
+          });
+          return;
+        }
+
+        const response = await axios.put(
+          `http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}/disponible`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
         const updatedAsiento = response.data;
-  
+
         // Actualizar la lista de asientos para reflejar el cambio de disponibilidad en el estado general
         setAsientos(prevAsientos =>
           prevAsientos.map(asiento =>
@@ -184,7 +207,7 @@ export default function PanelAdmin() {
               : asiento
           )
         );
-  
+
         // Limpia el formulario y el asiento seleccionado
         setAsientoSeleccionado(null);
         setNombreComprador('');
@@ -195,7 +218,7 @@ export default function PanelAdmin() {
         setQrCode(null);
         setImagenComprobante(null);
         setCodigoVerificacion('');
-  
+
         Swal.fire({
           title: "¡Buen trabajo!",
           text: "El asiento se marcó como disponible satisfactoriamente.",
@@ -208,9 +231,8 @@ export default function PanelAdmin() {
     }
   };
 
-
   // Si el usuario no está autenticado, mostrar la pantalla de login
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !token) {
     return (
       <div className="login-container">
         <div className="login-card">
@@ -240,43 +262,42 @@ export default function PanelAdmin() {
       <h1 className="panel-title">Panel de Control - Gestión de Asientos</h1>
       <div className="panel-content">
         <div className="seat-map">
-        <div className="seat-grid-container">
-  <div className="seat-grid">
-    {asientos.slice(0, 150).map((asiento) => (
-      <button
-        key={asiento.asiento_id}
-        onClick={() => manejarClicAsiento(asiento)}
-        className={`seat ${
-          !asiento.disponible
-            ? 'seat-occupied'
-            : asiento.asiento_id === asientoSeleccionado?.asiento_id
-            ? 'seat-selected'
-            : 'seat-available'
-        }`}
-      >
-        {asiento.asiento_numero}
-      </button>
-    ))}
-  </div>
-  <div className="seat-grid">
-    {asientos.slice(150, 300).map((asiento) => (
-      <button
-        key={asiento.asiento_id}
-        onClick={() => manejarClicAsiento(asiento)}
-        className={`seat ${
-          !asiento.disponible
-            ? 'seat-occupied'
-            : asiento.asiento_id === asientoSeleccionado?.asiento_id
-            ? 'seat-selected'
-            : 'seat-available'
-        }`}
-      >
-        {asiento.asiento_numero}
-      </button>
-    ))}
-  </div>
-</div>
-          <div className="stage"></div>
+          <div className="seat-grid-container">
+            <div className="seat-grid">
+              {asientos.slice(0, 150).map((asiento) => (
+                <button
+                  key={asiento.asiento_id}
+                  onClick={() => manejarClicAsiento(asiento)}
+                  className={`seat ${
+                    !asiento.disponible
+                      ? 'seat-occupied'
+                      : asiento.asiento_id === asientoSeleccionado?.asiento_id
+                      ? 'seat-selected'
+                      : 'seat-available'
+                  }`}
+                >
+                  {asiento.asiento_numero}
+                </button>
+              ))}
+            </div>
+            <div className="seat-grid">
+              {asientos.slice(150, 300).map((asiento) => (
+                <button
+                  key={asiento.asiento_id}
+                  onClick={() => manejarClicAsiento(asiento)}
+                  className={`seat ${
+                    !asiento.disponible
+                      ? 'seat-occupied'
+                      : asiento.asiento_id === asientoSeleccionado?.asiento_id
+                      ? 'seat-selected'
+                      : 'seat-available'
+                  }`}
+                >
+                  {asiento.asiento_numero}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="client-form">
           {asientoSeleccionado ? (
@@ -305,7 +326,8 @@ export default function PanelAdmin() {
                 </div>
               )}
               <button onClick={guardarCambios} className="guardar-cambios">Guardar Cambios</button>
-              <button onClick={marcarComoDisponible} className="marcar-disponible-btn">Marcar como Disponible</button>            </>
+              <button onClick={marcarComoDisponible} className="marcar-disponible-btn">Marcar como Disponible</button>
+            </>
           ) : (
             <p>Seleccione un asiento para ver los detalles</p>
           )}
