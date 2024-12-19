@@ -1,26 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Importa Link
+import React from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
-import { useAuth } from './AuthContext'; // Importa el AuthContext
+import { useAuth } from './AuthContext';
 import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const { logout } = useAuth(); // Usa el AuthContext
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado local para autenticación
-
-  useEffect(() => {
-    // Verifica si el token existe en el localStorage al cargar el componente
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token); // Actualiza el estado según si el token existe
-  }, []);
-
-  const handleLoginSuccess = () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-      window.location.reload(); // Recarga la página para reflejar cambios en el Navbar
-    }
-  };
+  const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
     Swal.fire({
@@ -32,12 +17,8 @@ const Navbar = () => {
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem('token'); // Eliminar el token de localStorage
-        setIsAuthenticated(false); // Cambiar el estado de autenticación
         logout();
-        Swal.fire("Sesión cerrada", "Has cerrado sesión exitosamente.", "success").then(() => {
-          window.location.reload(); // Recarga la página para garantizar que todos los estados se reinicien
-        });
+        Swal.fire("Sesión cerrada", "Has cerrado sesión exitosamente.", "success");
       }
     });
   };
@@ -70,7 +51,6 @@ const Navbar = () => {
             </li>
           </>
         ) : (
-          // Si está autenticado, mostrar "Panel de Admin" y "Cerrar Sesión"
           <>
             <li className="navbar-item">
               <Link to="/paneladmin">PANEL ADMIN</Link>
@@ -81,7 +61,6 @@ const Navbar = () => {
           </>
         )}
       </ul>
-      {/* Mostrar el botón de "Comprar Entradas" solo si no está autenticado */}
       {!isAuthenticated && (
         <Link to="/asientos">
           <button className="buy-button-navbar navbar-item">COMPRAR ENTRADAS</button>

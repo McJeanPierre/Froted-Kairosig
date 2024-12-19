@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './Asientos.css';
 import axios from 'axios';
 
+const API_BASE_URL = 'http://localhost:5000/api';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
 export default function SeatMap() {
   const [seats, setSeats] = useState([]);
   const [selectedSeat, setSelectedSeat] = useState(null);
@@ -19,7 +28,7 @@ export default function SeatMap() {
   useEffect(() => {
     const fetchSeats = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/asientos');
+        const response = await api.get('/asientos');
         if (response.data && Array.isArray(response.data)) {
           setSeats(response.data);
         } else {
@@ -60,7 +69,7 @@ export default function SeatMap() {
 
   const handleDepositPayment = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/asientos/${selectedSeat}/disponible`);
+      await api.put(`/asientos/${selectedSeat}/disponible`);
       setSelectedSeat(null);
       setShowPaymentOptions(false);
       setPaymentConfirmed(true);

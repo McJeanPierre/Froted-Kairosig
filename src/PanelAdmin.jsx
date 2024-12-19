@@ -4,6 +4,15 @@ import { useAuth } from './AuthContext';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+const API_BASE_URL = 'http://localhost:5000/api';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
 export default function PanelAdmin() {
   const { isAuthenticated, login } = useAuth();
   const [nombreUsuario, setNombreUsuario] = useState('');
@@ -19,13 +28,10 @@ export default function PanelAdmin() {
   const [imagenComprobante, setImagenComprobante] = useState(null);
   const [codigoVerificacion, setCodigoVerificacion] = useState('');
 
-  // Obtener el token desde localStorage al cargar la página
-  const [token, setToken] = useState(localStorage.getItem('token'));
-
   useEffect(() => {
     const fetchSeats = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/asientos');
+        const response = await api.get('/asientos');
         setAsientos(response.data);
       } catch (error) {
         console.error('Error al cargar los asientos:', error);
@@ -48,22 +54,16 @@ export default function PanelAdmin() {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/admin/login', {
+      const response = await api.post('/admin/login', {
         email: nombreUsuario,
         contrasena: contrasena
       });
       if (response.data.success) {
-        // Guardar el token en localStorage
-        localStorage.setItem('token', response.data.token);
-        setToken(response.data.token);
-
+        login(response.data.token);
         Swal.fire({
           title: "¡Bienvenido, Administrador!",
           text: "Inicio de sesión exitoso",
           icon: "success"
-        }).then(() => {
-          login(); // Redirigir después de que el usuario cierre la alerta
-          window.location.reload(); // Recargar la página para reflejar el cambio en el Navbar
         });
       } else {
         Swal.fire({
@@ -88,10 +88,10 @@ export default function PanelAdmin() {
     setApellidoComprador(asiento.cliente_apellido || '');
     setCedulaComprador(asiento.cliente_cedula || '');
     setEmailComprador(asiento.cliente_email || '');
-    setMetodoPago(asiento.metodo_pago || ''); // Mostrar el método de pago
+    setMetodoPago(asiento.metodo_pago || '');
     setQrCode(asiento.codigo_qr ? asiento.codigo_qr : null);
-    setImagenComprobante(asiento.imagen || null); // Cargar la imagen desde la base de datos
-    setCodigoVerificacion(asiento.codigo_verificacion || ''); // Mostrar el código de verificación
+    setImagenComprobante(asiento.imagen || null);
+    setCodigoVerificacion(asiento.codigo_verificacion || '');
   };
 
   const manejarCargaImagen = (e) => {
@@ -108,7 +108,6 @@ export default function PanelAdmin() {
     }
   };
 
-
   const guardarCambios = async () => {
     if (!nombreComprador || !apellidoComprador || !cedulaComprador || !emailComprador || !imagenComprobante) {
       Swal.fire({
@@ -118,7 +117,7 @@ export default function PanelAdmin() {
       });
       return;
     }
-  
+
     const token = localStorage.getItem('token');
     if (!token) {
       Swal.fire({
@@ -128,7 +127,7 @@ export default function PanelAdmin() {
       });
       return;
     }
-  
+
     if (asientoSeleccionado) {
       Swal.fire({
         title: "¿Desea guardar los cambios?",
@@ -140,37 +139,33 @@ export default function PanelAdmin() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const response = await axios.put(
-              `http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`,
+            const response = await api.put(
+              `/asientos/${asientoSeleccionado.asiento_id}`,
               {
                 disponible: false,
                 nombre: nombreComprador,
                 apellido: apellidoComprador,
                 cedula: cedulaComprador,
                 email: emailComprador,
-                imagen: imagenComprobante,  // Cambia 'comprobante' a 'imagen'
+                imagen: imagenComprobante,
                 metodo_pago: "Deposito"
               },
               {
                 headers: {
-                  Authorization: `Bearer ${token}`, // Agregar token al encabezado
+                  Authorization: `Bearer ${token}`,
                 },
               }
             );
-  
+
             const updatedAsiento = response.data;
-  
-            // Recargar la lista de asientos desde el servidor para asegurar que todos los datos están actualizados
-            const responseAsientos = await axios.get('http://localhost:5000/api/asientos');
+
+            const responseAsientos = await api.get('/asientos');
             setAsientos(responseAsientos.data);
-  
-            // Actualizar el asiento seleccionado con los datos más recientes
+
             setAsientoSeleccionado(updatedAsiento);
-  
-            // Aquí se utilizará asiento_numero en lugar de asiento_id
             setQrCode(updatedAsiento.codigo_qr);
-            setCodigoVerificacion(updatedAsiento.codigo_verificacion); // Asegúrate de usar el nuevo código de verificación
-  
+            setCodigoVerificacion(updatedAsiento.codigo_verificacion);
+
             Swal.fire("¡Guardado!", "Datos actualizados, QR generado y comprobante de depósito guardado.", "success");
           } catch (error) {
             console.error('Error al actualizar el asiento:', error);
@@ -183,7 +178,6 @@ export default function PanelAdmin() {
         } else if (result.isDenied) {
           Swal.fire("Los cambios no se han guardado", "", "info");
         } else if (result.isDismissed) {
-          // Limpiar los campos
           setNombreComprador('');
           setApellidoComprador('');
           setCedulaComprador('');
@@ -197,11 +191,11 @@ export default function PanelAdmin() {
       });
     }
   };
-  
 
   const marcarComoDisponible = async () => {
     if (asientoSeleccionado) {
       try {
+        const token = localStorage.getItem('token');
         if (!token) {
           Swal.fire({
             title: "Error de autenticación",
@@ -211,8 +205,8 @@ export default function PanelAdmin() {
           return;
         }
 
-        const response = await axios.put(
-          `http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}/disponible`,
+        const response = await api.put(
+          `/asientos/${asientoSeleccionado.asiento_id}/disponible`,
           {},
           {
             headers: {
@@ -223,7 +217,6 @@ export default function PanelAdmin() {
 
         const updatedAsiento = response.data;
 
-        // Actualizar la lista de asientos para reflejar el cambio de disponibilidad en el estado general
         setAsientos(prevAsientos =>
           prevAsientos.map(asiento =>
             asiento.asiento_id === updatedAsiento.asiento_id
@@ -232,7 +225,6 @@ export default function PanelAdmin() {
           )
         );
 
-        // Limpia el formulario y el asiento seleccionado
         setAsientoSeleccionado(null);
         setNombreComprador('');
         setApellidoComprador('');
@@ -255,8 +247,18 @@ export default function PanelAdmin() {
     }
   };
 
-  // Si el usuario no está autenticado, mostrar la pantalla de login
-  if (!isAuthenticated && !token) {
+  useEffect(() => {
+    if (!isAuthenticated) {
+      clearData();
+    }
+  }, [isAuthenticated]);
+
+  const clearData = () => {
+    setNombreUsuario('');
+    setContraseña('');
+  };
+
+  if (!isAuthenticated) {
     return (
       <div className="login-container">
         <div className="login-card">
