@@ -108,6 +108,7 @@ export default function PanelAdmin() {
     }
   };
 
+
   const guardarCambios = async () => {
     if (!nombreComprador || !apellidoComprador || !cedulaComprador || !emailComprador || !imagenComprobante) {
       Swal.fire({
@@ -117,7 +118,7 @@ export default function PanelAdmin() {
       });
       return;
     }
-
+  
     if (asientoSeleccionado) {
       Swal.fire({
         title: "¿Desea guardar los cambios?",
