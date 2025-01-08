@@ -4,10 +4,19 @@ import { useAuth } from './AuthContext';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+}); 
+
 export default function PanelAdmin() {
   const { isAuthenticated, login } = useAuth();
   const [nombreUsuario, setNombreUsuario] = useState('');
-  const [contraseña, setContraseña] = useState('');
+  const [contrasena, setContraseña] = useState('');
   const [asientos, setAsientos] = useState([]);
   const [asientoSeleccionado, setAsientoSeleccionado] = useState(null);
   const [nombreComprador, setNombreComprador] = useState('');
@@ -17,11 +26,12 @@ export default function PanelAdmin() {
   const [metodoPago, setMetodoPago] = useState('');
   const [qrCode, setQrCode] = useState(null);
   const [imagenComprobante, setImagenComprobante] = useState(null);
+  const [codigoVerificacion, setCodigoVerificacion] = useState('');
 
   useEffect(() => {
     const fetchSeats = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/asientos');
+        const response = await api.get('/asientos');
         setAsientos(response.data);
       } catch (error) {
         console.error('Error al cargar los asientos:', error);
@@ -33,8 +43,8 @@ export default function PanelAdmin() {
 
   const manejarInicioSesion = async (e) => {
     e.preventDefault();
-    
-    if (!nombreUsuario || !contraseña) {
+
+    if (!nombreUsuario || !contrasena) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -44,17 +54,16 @@ export default function PanelAdmin() {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/admin/login', {
+      const response = await api.post('/admin/login', {
         email: nombreUsuario,
-        contraseña: contraseña
+        contrasena: contrasena
       });
       if (response.data.success) {
+        login(response.data.token);
         Swal.fire({
           title: "¡Bienvenido, Administrador!",
           text: "Inicio de sesión exitoso",
           icon: "success"
-        }).then(() => {
-          login(); // Redirigir después de que el usuario cierre la alerta
         });
       } else {
         Swal.fire({
@@ -79,11 +88,11 @@ export default function PanelAdmin() {
     setApellidoComprador(asiento.cliente_apellido || '');
     setCedulaComprador(asiento.cliente_cedula || '');
     setEmailComprador(asiento.cliente_email || '');
-    setMetodoPago(asiento.metodo_pago || ''); // Mostrar el método de pago
+    setMetodoPago(asiento.metodo_pago || '');
     setQrCode(asiento.codigo_qr ? asiento.codigo_qr : null);
-    setImagenComprobante(asiento.imagen || null); // Cargar la imagen desde la base de datos
+    setImagenComprobante(asiento.imagen || null);
+    setCodigoVerificacion(asiento.codigo_verificacion || '');
   };
-  
 
   const manejarCargaImagen = (e) => {
     const file = e.target.files[0];
@@ -99,75 +108,156 @@ export default function PanelAdmin() {
     }
   };
 
-
   const guardarCambios = async () => {
+    if (!nombreComprador || !apellidoComprador || !cedulaComprador || !emailComprador || !imagenComprobante) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Por favor, complete todos los campos obligatorios y seleccione un archivo.',
+      });
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de autenticación',
+        text: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
+      });
+      return;
+    }
+
+    if (asientoSeleccionado) {
+      Swal.fire({
+        title: "¿Desea guardar los cambios?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Guardar",
+        denyButtonText: `No guardar`,
+        cancelButtonText: 'Cancelar'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await api.put(
+              `/asientos/${asientoSeleccionado.asiento_id}`,
+              {
+                disponible: false,
+                nombre: nombreComprador,
+                apellido: apellidoComprador,
+                cedula: cedulaComprador,
+                email: emailComprador,
+                imagen: imagenComprobante,
+                metodo_pago: "Deposito"
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            const updatedAsiento = response.data;
+
+            const responseAsientos = await api.get('/asientos');
+            setAsientos(responseAsientos.data);
+
+            setAsientoSeleccionado(updatedAsiento);
+            setQrCode(updatedAsiento.codigo_qr);
+            setCodigoVerificacion(updatedAsiento.codigo_verificacion);
+
+            Swal.fire("¡Guardado!", "Datos actualizados, QR generado y comprobante de depósito guardado.", "success");
+          } catch (error) {
+            console.error('Error al actualizar el asiento:', error);
+            if (error.response?.status === 401 || error.response?.status === 403) {
+              Swal.fire('Error de autenticación', 'Por favor, inicia sesión nuevamente.', 'error');
+            } else {
+              Swal.fire('Hubo un problema al guardar los cambios.', '', 'error');
+            }
+          }
+        } else if (result.isDenied) {
+          Swal.fire("Los cambios no se han guardado", "", "info");
+        } else if (result.isDismissed) {
+          setNombreComprador('');
+          setApellidoComprador('');
+          setCedulaComprador('');
+          setEmailComprador('');
+          setImagenComprobante(null);
+          setQrCode(null);
+          setAsientoSeleccionado(null);
+          setCodigoVerificacion('');
+          Swal.fire("Operación cancelada", "Todos los cambios han sido borrados.", "info");
+        }
+      });
+    }
+  };
+
+  const marcarComoDisponible = async () => {
     if (asientoSeleccionado) {
       try {
-        const response = await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}`, {
-          disponible: false,
-          nombre: nombreComprador,
-          apellido: apellidoComprador,
-          cedula: cedulaComprador,
-          email: emailComprador,
-          imagen: imagenComprobante,  // Cambia 'comprobante' a 'imagen'
-          metodo_pago: "Deposito"
-        });
-  
+        const token = localStorage.getItem('token');
+        if (!token) {
+          Swal.fire({
+            title: "Error de autenticación",
+            text: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+            icon: "error"
+          });
+          return;
+        }
+
+        const response = await api.put(
+          `/asientos/${asientoSeleccionado.asiento_id}/disponible`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
         const updatedAsiento = response.data;
-  
-        // Recargar la lista de asientos desde el servidor para asegurar que todos los datos están actualizados
-        const responseAsientos = await axios.get('http://localhost:5000/api/asientos');
-        setAsientos(responseAsientos.data);
-  
-        // Actualizar el asiento seleccionado con los datos más recientes
-        setAsientoSeleccionado(updatedAsiento);
-  
-        setQrCode(updatedAsiento.codigo_qr);
-        alert('Datos actualizados, QR generado y comprobante de depósito guardado.');
+
+        setAsientos(prevAsientos =>
+          prevAsientos.map(asiento =>
+            asiento.asiento_id === updatedAsiento.asiento_id
+              ? { ...asiento, disponible: true, cliente_nombre: '', cliente_apellido: '', cliente_cedula: '', cliente_email: '', metodo_pago: '', imagen: null, codigo_qr: null, codigo_verificacion: '' }
+              : asiento
+          )
+        );
+
+        setAsientoSeleccionado(null);
+        setNombreComprador('');
+        setApellidoComprador('');
+        setCedulaComprador('');
+        setEmailComprador('');
+        setMetodoPago('');
+        setQrCode(null);
+        setImagenComprobante(null);
+        setCodigoVerificacion('');
+
+        Swal.fire({
+          title: "¡Buen trabajo!",
+          text: "El asiento se marcó como disponible satisfactoriamente.",
+          icon: "success"
+        });
       } catch (error) {
-        console.error('Error al actualizar el asiento:', error);
-        alert('Hubo un problema al guardar los cambios.');
+        console.error('Error al marcar el asiento como disponible:', error);
+        Swal.fire('Hubo un problema al marcar el asiento como disponible.', '', 'error');
       }
     }
   };
-  
 
-const marcarComoDisponible = async () => {
-  if (asientoSeleccionado) {
-    try {
-      const response = await axios.put(`http://localhost:5000/api/asientos/${asientoSeleccionado.asiento_id}/disponible`);
-      
-      const updatedAsiento = response.data;
-
-      // Actualizar la lista de asientos para reflejar el cambio de disponibilidad en el estado general
-      setAsientos(prevAsientos =>
-        prevAsientos.map(asiento =>
-          asiento.asiento_id === updatedAsiento.asiento_id
-            ? { ...asiento, disponible: true, cliente_nombre: '', cliente_apellido: '', cliente_cedula: '', cliente_email: '', metodo_pago: '', imagen: null }
-            : asiento
-        )
-      );
-
-      // Limpia el formulario y el asiento seleccionado
-      setAsientoSeleccionado(null);
-      setNombreComprador('');
-      setApellidoComprador('');
-      setCedulaComprador('');
-      setEmailComprador('');
-      setMetodoPago('');
-      setQrCode(null);
-      setImagenComprobante(null);
-
-      alert('Asiento marcado como disponible nuevamente.');
-    } catch (error) {
-      console.error('Error al marcar el asiento como disponible:', error);
-      alert('Hubo un problema al actualizar la disponibilidad del asiento.');
+  useEffect(() => {
+    if (!isAuthenticated) {
+      clearData();
     }
-  }
-};
+  }, [isAuthenticated]);
 
+  const clearData = () => {
+    setNombreUsuario('');
+    setContraseña('');
+  };
 
-  // Si el usuario no está autenticado, mostrar la pantalla de login
   if (!isAuthenticated) {
     return (
       <div className="login-container">
@@ -183,10 +273,10 @@ const marcarComoDisponible = async () => {
             <input
               type="password"
               placeholder="Contraseña"
-              value={contraseña}
+              value={contrasena}
               onChange={(e) => setContraseña(e.target.value)}
             />
-            <button type="submit">Iniciar Sesión</button>
+            <button className='incio'>Iniciar Sesión</button>
           </form>
         </div>
       </div>
@@ -199,27 +289,41 @@ const marcarComoDisponible = async () => {
       <div className="panel-content">
         <div className="seat-map">
           <div className="seat-grid-container">
-            {[0, 1].map((side) => (
-              <div key={side} className="seat-grid">
-                {asientos.slice(side * 150, (side + 1) * 150).map((asiento) => (
-                  <button
-                    key={asiento.asiento_id}
-                    onClick={() => manejarClicAsiento(asiento)}
-                    className={`seat ${
-                      !asiento.disponible
-                        ? 'seat-occupied'
-                        : asiento.asiento_id === asientoSeleccionado?.asiento_id
-                        ? 'seat-selected'
-                        : 'seat-available'
-                    }`}
-                  >
-                    {asiento.asiento_numero}
-                  </button>
-                ))}
-              </div>
-            ))}
+            <div className="seat-grid">
+              {asientos.slice(0, 150).map((asiento) => (
+                <button
+                  key={asiento.asiento_id}
+                  onClick={() => manejarClicAsiento(asiento)}
+                  className={`seat ${
+                    !asiento.disponible
+                      ? 'seat-occupied'
+                      : asiento.asiento_id === asientoSeleccionado?.asiento_id
+                      ? 'seat-selected'
+                      : 'seat-available'
+                  }`}
+                >
+                  {asiento.asiento_numero}
+                </button>
+              ))}
+            </div>
+            <div className="seat-grid">
+              {asientos.slice(150, 300).map((asiento) => (
+                <button
+                  key={asiento.asiento_id}
+                  onClick={() => manejarClicAsiento(asiento)}
+                  className={`seat ${
+                    !asiento.disponible
+                      ? 'seat-occupied'
+                      : asiento.asiento_id === asientoSeleccionado?.asiento_id
+                      ? 'seat-selected'
+                      : 'seat-available'
+                  }`}
+                >
+                  {asiento.asiento_numero}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="stage"></div>
         </div>
         <div className="client-form">
           {asientoSeleccionado ? (
@@ -230,6 +334,7 @@ const marcarComoDisponible = async () => {
               <input type="text" placeholder="Cédula del Comprador" value={cedulaComprador} onChange={(e) => setCedulaComprador(e.target.value)} />
               <input type="email" placeholder="Correo Electrónico del Comprador" value={emailComprador} onChange={(e) => setEmailComprador(e.target.value)} />
               <input type="text" placeholder="Método de Pago" value={metodoPago} disabled />
+              <input type="text" placeholder="Código de Verificación" value={codigoVerificacion} disabled />
               <div className="file-input">
                 <input type="file" accept="image/*" onChange={manejarCargaImagen} id="comprobante" />
                 <label htmlFor="comprobante">Seleccionar archivo</label>
@@ -247,7 +352,7 @@ const marcarComoDisponible = async () => {
                 </div>
               )}
               <button onClick={guardarCambios} className="guardar-cambios">Guardar Cambios</button>
-              <button onClick={marcarComoDisponible} className="marcar-disponible">Marcar como Disponible</button>
+              <button onClick={marcarComoDisponible} className="marcar-disponible-btn">Marcar como Disponible</button>
             </>
           ) : (
             <p>Seleccione un asiento para ver los detalles</p>

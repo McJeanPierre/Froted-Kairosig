@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 .seat-map-container {
   display: flex;
   flex-direction: column;
@@ -8,6 +10,7 @@
 }
 
 .seat-map-title {
+  color: #111111;
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
@@ -41,37 +44,43 @@
 }
 
 .seat {
-  width: 3rem; /* Aumenta el tamaño del asiento */
-  height: 3rem; /* Aumenta el tamaño del asiento */
+  width: 3.5rem; /* Aumenta el tamaño del asiento */
+  height: 3.5rem; /* Aumenta el tamaño del asiento */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem; /* Ajusta el tamaño del texto */
+  font-size: 1.75rem; /* Aumenta el tamaño del texto */
+  font-family: 'Roboto', sans-serif; /* Cambia el tipo de fuente */
   border-radius: 0.25rem;
   cursor: pointer;
   border: none;
-}
-
-.seat:disabled {
-  cursor: not-allowed;
-}
-
-.seat-available {
-  background-color: #e5e7eb;
+  color: #111111; /* Asegúrate de que el color del texto sea visible */
+  background-color: #e5e7eb; /* Color de fondo para asientos disponibles */
+  transition: background-color 0.3s ease; /* Transición suave para cambios de color */
 }
 
 .seat-available:hover {
-  background-color: #d1d5db;
+  background-color: #d1d5db; /* Color de fondo al pasar el ratón por encima */
 }
 
 .seat-selected {
-  background-color: #3b82f6;
-  color: white;
+  background-color: #3b82f6; /* Color de fondo para asientos seleccionados */
+  color: white; /* Color del texto para asientos seleccionados */
+}
+
+
+
+.select-seat-message {
+  font-size: 1.5rem; /* Aumenta el tamaño de la fuente */
+  color: #111111; /* Asegúrate de que el color sea visible */
+  margin-bottom: 1rem; /* Ajusta el margen según sea necesario */
+  font-weight: bold; /* Haz el texto en negrita para mayor visibilidad */
+  text-align: center; /* Centra el texto */
 }
 
 .seat-occupied {
-  background-color: #ef4444;
-  color: white;
+  background-color: #ef4444; /* Color de fondo para asientos ocupados */
+  color: white; /* Color del texto para asientos ocupados */
 }
 
 .stage {
@@ -263,3 +272,29 @@
   }
 }
 
+.payment-confirmation-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 1000;
+}
+
+.close-confirmation-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-confirmation-button:hover {
+  background-color: #45a049;
+}

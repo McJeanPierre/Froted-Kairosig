@@ -6,6 +6,7 @@ import Asientos from './Asientos';
 import Locacion from './Locacion';
 import Agenda from './Agenda';
 import Navbar from './Navbar';
+import PricesControl from './PricesControl';
 import PanelAdmin from './PanelAdmin';
 import NotFound from './NotFound';
 import { AuthProvider } from './AuthContext'; // Importar AuthProvider
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<><Navbar /><HomePage /></>} />
             <Route path="/pricing" element={<><Navbar /><PricingSection /></>} />
             <Route path="/asientos" element={<><Navbar /><Asientos /></>} />
+            <Route path="PricesControl" element={<><Navbar /><PricesControl /></>} />
             <Route path="/locacion" element={<><Navbar /><Locacion /></>} />
             <Route path="/agenda" element={<><Navbar /><Agenda /></>} />
             <Route path="/paneladmin" element={<><Navbar /><PanelAdmin /></>} />

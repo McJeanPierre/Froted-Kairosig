@@ -1,31 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Importa Link
+import { Link } from "react-router-dom";
 import "./Navbar.css";
-import { useAuth } from './AuthContext'; // Importa el AuthContext
+import { useAuth } from './AuthContext';
 import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const { isAuthenticated, logout } = useAuth(); // Usa el AuthContext
+  const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
     Swal.fire({
       title: "¿Estás seguro de que deseas cerrar sesión?",
-      text: "Tu sesión actual se cerrará y tendrás que iniciar sesión nuevamente para acceder.",
+      text: "Tu sesión actual se cerrará.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, cerrar sesión",
+      confirmButtonText: "Cerrar sesión",
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "¡Cerrado!",
-          text: "Has cerrado sesión exitosamente.",
-          icon: "success"
-        }).then(() => {
-          logout(); // Llama a la función logout del contexto de autenticación
-        });
+        logout();
+        Swal.fire("Sesión cerrada", "Has cerrado sesión exitosamente.", "success");
       }
     });
   };
@@ -58,13 +51,23 @@ const Navbar = () => {
             </li>
           </>
         ) : (
-          // Si está autenticado, solo mostrar "Cerrar Sesión"
-          <li className="navbar-item">
-            <button className="logout-button" onClick={handleLogout}>CERRAR SESIÓN</button>
-          </li>
+          <>
+            <li className="navbar-item">
+              <Link to="/paneladmin">
+                <button className="admin-button">PANEL ADMIN</button>
+              </Link>
+            </li>
+            <li className="navbar-item">
+              <Link to="/pricescontrol">
+                <button className="prices-button">CONTROL DE PRECIOS</button>
+              </Link>
+            </li>
+            <li className="navbar-item">
+              <button className="logout-button" onClick={handleLogout}>CERRAR SESIÓN</button>
+            </li>
+          </>
         )}
       </ul>
-      {/* Mostrar el botón de "Comprar Entradas" solo si no está autenticado */}
       {!isAuthenticated && (
         <Link to="/asientos">
           <button className="buy-button-navbar navbar-item">COMPRAR ENTRADAS</button>
